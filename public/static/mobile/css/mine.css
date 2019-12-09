@@ -1,0 +1,174 @@
+html {
+    background-color: #eee;
+}
+.main {
+    padding-bottom: 0;
+}
+
+
+.main .item {
+    background-color: #fff;
+    width: 85%;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    min-height: 30px;
+}
+
+.main .item-menu {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px #ccc;
+    display: flex;
+    flex-direction: column;
+}
+
+.main .item-menu>div {
+    width: 100%;
+}
+.main .item-menu>div:last-of-type {
+    margin-bottom: 0px;
+}
+
+
+.main .top-img {
+    width: 100%;
+    height: 165px;
+}
+
+.main .top-img img {
+    width: 100%;
+}
+
+/* 用户头像信息 */
+
+.main .item-meminfo {
+    position: relative;
+    margin-top: -50px;
+}
+
+.main .item .meminfo {
+    min-height: 75px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main .item .meminfo .mem-hea-left {
+    display: flex;
+    justify-content: flex-start;
+    width: 80%;
+}
+
+.main .item .meminfo .mem-hea-img {
+    margin-top: -25px;
+}
+
+.main .item .meminfo .mem-hea-img img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+}
+
+.main .item .meminfo .mem-hea-info {
+    height: 50px;
+    margin-left: 15px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.main .item .meminfo .mem-hea-info .name {
+    font-size: 16px;
+    font-weight: bold;
+    color: #666;
+}
+[data-dpr="2"] .main .item .meminfo .mem-hea-info .name {
+    font-size: 32px;
+}
+[data-dpr="3"] .main .item .meminfo .mem-hea-info .name {
+    font-size: 48px;
+}
+
+.main .item .meminfo .mem-hea-info .tip {
+    color: #666;
+    font-size: 12px;
+}
+[data-dpr="2"] .main .item .meminfo .mem-hea-info .tip {
+    font-size: 24px;
+}
+[data-dpr="3"] .main .item .meminfo .mem-hea-info .tip {
+    font-size: 36px;
+}
+
+.main .item .meminfo .switch-iden {
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    min-width: 2.3rem;
+    font-size: 13px;
+}
+[data-dpr="2"] .main .item .meminfo .switch-iden {
+    font-size: 26px;
+}
+[data-dpr="3"] .main .item .meminfo .switch-iden {
+    font-size: 39px;
+}
+
+.main .item .meminfo .switch-iden span:last-of-type {
+    margin-top: 0.12rem;
+}
+
+.main .item .mao-info {
+    margin-top: 1px;
+}
+.main .item .mao-info ul {
+    display: flex;
+    justify-content: space-around;
+}
+.main .item .mao-info li {
+    color: #666;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 45px;
+}
+[data-dpr="2"] .main .item .mao-info li {
+    font-size: 30px;
+}
+[data-dpr="3"] .main .item .mao-info li {
+    font-size: 45px;
+}
+
+.main .item .mao-info li .d-val {
+    font-weight: bold;
+}
+
+/* 菜单 */
+.main .menus {
+    color: #333;
+    font-size: 16px;
+}
+[data-dpr="2"] .main .menus {
+    font-size: 32px;
+}
+[data-dpr="3"] .main .menus {
+    font-size: 48px;
+}
+
+.main .menus>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+}
+
+.main .menus>div .menu-left {
+    display: flex;
+    align-items: center;
+}
+
+.main .menus>div .menu-left span:last-of-type {
+    margin-left: 0.2rem;
+}

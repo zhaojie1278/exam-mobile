@@ -1,0 +1,251 @@
+@charset "utf-8";
+
+html {
+    height: 100vh;
+    overflow-y: scroll;
+    background: none repeat scroll 0 0 #FFFFFF;
+    font-family: 'Microsoft Yahei','微软雅黑', 'Courier New', Courier, monospace
+}
+
+body,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+blockquote,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+pre,
+fieldset,
+lengend,
+button,
+input,
+textarea,
+form,
+th,
+td {
+    margin: 0;
+    padding: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+p {
+    font-family: 'Microsoft YaHei', '微软雅黑', "Helvetica Neue", Tahoma, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+ul,
+ol {
+    list-style: none;
+}
+
+
+body {
+    display: block;
+}
+
+.header {
+    background-color: #fff;
+    width: 100%;
+    text-align: center;
+    border-bottom: 0.013334rem solid #ddd;
+}
+.header .h-nav {
+    margin: 0 auto;
+    width: 60%;
+    height: 1.1rem;
+    display: flex;
+    justify-content: space-around;
+    /* align-items: center; */
+    color: #000;
+    font-size: 16px;
+}
+[data-dpr="2"].footer .h-nav {
+    font-size: 32px;
+}
+}
+[data-dpr="3"].footer .h-nav {
+    font-size: 48px;
+}
+
+.header .h-nav span {
+    width: 1.35rem;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header .h-nav span.current {
+    border-bottom: 0.067rem solid #FF9800;
+}
+
+.footer {
+    border-top: 0.013334rem solid #ddd;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    min-height: 0.93334rem;
+    background: #fff;
+    width: 100%;
+}
+
+.footer .nav {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    align-items: center;
+    color: #333;
+    font-size: 14px;
+    padding: 0.06667rem 0;
+}
+[data-dpr="2"].footer .nav {
+    font-size: 28px;
+}
+}
+[data-dpr="3"].footer .nav {
+    font-size: 42px;
+}
+
+.footer .nav.share {
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 6rem;
+    height: 1.3rem;
+    background-color: #FF9800;
+    color: #fff;
+    font-size: 18px;
+}
+[data-dpr="2"] .footer .nav.share {
+        font-size: 36px;
+}
+[data-dpr="3"] .footer .nav.share {
+        font-size: 54px;
+}
+
+.main {
+    width: 100%;
+    margin-bottom: 100px;
+    padding-bottom: 100px;
+}
+
+.icon-whole {
+    background-image: url("../images/icon.png?v=1.5");
+    background-size: 10rem;
+    background-repeat: no-repeat;
+}
+
+.icon-index {
+    width: 0.70667rem;
+    height: 0.68rem;
+    background-position: 0 -0.26667rem;
+}
+
+.icon-puls {
+    width: 0.8667rem;
+    height: 0.8667rem;
+    background-position: -0.9466rem -0.1066rem;
+}
+
+.icon-mine {
+    width: 0.72rem;
+    height: 0.72rem;
+    background-position: -1.8933rem -0.24rem;
+}
+
+.icon-fav {
+    width: 0.69334rem;
+    height: 0.6667rem;
+    background-position: -3.7733rem -0.3066rem;
+}
+
+.icon-comment1 {
+    width: 0.69334rem;
+    height: 0.6667rem;
+    background-position: -2.83334rem -0.28rem;
+}
+
+.icon-comment2 {
+    width: 0.69334rem;
+    height: 0.6667rem;
+    background-position: -6.6133rem -0.32rem;
+}
+
+.icon-see {
+    width: 0.69334rem;
+    height: 0.50667rem;
+    background-position: -4.7333rem -0.4533rem;
+}
+
+.icon-jubao {
+    width: 0.69334rem;
+    height: 0.72rem;
+    background-position: -2.84rem -2.1333rem;
+}
+
+.icon-share1 {
+    width: 0.69334rem;
+    height: 0.6667rem;
+    background-position: -5.666rem -0.28rem;
+}
+
+.icon-iden {
+    width: 0.72rem;
+    height: 0.72rem;
+    background-position: 0 -1.16rem;
+}
+
+.icon-right {
+    width: 0.29333rem;
+    height: 0.42667rem;
+    background-position: -0.94666rem -2.4rem;
+}
+
+.icon-gift {
+    width: 0.72rem;
+    height: 0.65334rem;
+    background-position: -1.8933rem -1.22666rem;
+}
+
+.icon-rule {
+    width: 0.72rem;
+    height: 0.786667rem;
+    background-position: -3.77333rem -1.10666rem;
+}
+
+.icon-about {
+    width: 0.72rem;
+    height: 0.72rem;
+    background-position: -2.84rem -1.18666rem;
+}
+
+.icon-secret {
+    width: 0.72rem;
+    height: 0.8267rem;
+    background-position: -0.94666rem -1.08rem;
+}
+
+.icon-menu {
+    width: 0.6667rem;
+    height: 0.2rem;
+    background-position: -3.7866rem -2.64rem;
+}

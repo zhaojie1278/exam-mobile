@@ -1,0 +1,51 @@
+<{volist name="list" id="vo" }>
+<div class="item">
+    <div class="mem-info">
+        <div class="mem-info-main">
+            <div class="mem-hea-img">
+                <img src="<{$vo.head_img}>" />
+            </div>
+            <div class="mem-hea-info">
+                <span><{$vo.nick_name}></span>
+                <span class="time"><{:date('m-d H:i', strtotime($vo.create_time))}></span>
+            </div>
+        </div>
+        <div class="icon-whole icon-menu"></div>
+    </div>
+    <div class="shuo-msg">
+        <p>
+            <{$vo.shuo_msg}>
+        </p>
+        <{if condition="1" }>
+            <a class="see-all" href="<{$mobile_index_url}>/index/detail?s_id=<{$vo['shuo_id']}>">阅读全文 >></a>
+            <{/if}> 
+    </div>
+    <{notempty name="vo.imgs" }>
+    <div class="shuo-imgs">
+        <img src="<{$vo.imgs}>" />
+    </div>
+    <{/notempty}>
+    <{notempty name="vo.marks"}>
+    <div class="mark">
+        <{assign name="mark_list" value="$vo.marks|explode=',',###"}>
+        <{volist name="mark_list" id="mark" }>
+        <span><{$mark}></span>
+        <{/volist}>
+    </div>
+    <{/notempty}>
+    <div class="shuo-action">
+        <a>
+            <span class="icon-whole icon-comment1"></span>
+            <span>评论</span>
+        </a>
+        <a>
+            <span class="icon-whole icon-fav"></span>
+            <span><{$vo.fav_count}></span>
+        </a>
+        <a>
+            <span class="icon-whole icon-see"></span>
+            <span><{$vo.watch_count}></span>
+        </a>
+    </div>
+</div>
+<{/volist}>

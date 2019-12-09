@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Created by PhpStorm.
+ * User: 24200
+ * Date: 2018/3/18
+ * Time: 12:54
+ */
+return [
+    //分页配置
+    'paginate' => [
+        'type'      => 'bootstrap',
+        'var_page'  => 'page',
+        'list_rows' => 2,
+    ],
+];

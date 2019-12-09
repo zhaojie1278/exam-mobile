@@ -1,0 +1,11 @@
+@charset "utf-8";
+
+html {
+    overflow-y: scroll;
+    background: none repeat scroll 0 0 #FFFFFF;
+}
+
+body {
+    display: block;
+}
+

@@ -1,0 +1,22 @@
+<{layout name="layout/layout" /}>
+<{load href="/static/mobile/css/index.css" /}> 
+<{load href="/static/mobile/js/scroll.js" /}> 
+<{load href="/static/mobile/js/shuoshuo.js" /}> 
+<div class="header">
+    <div class="h-nav">
+        <span class="current">最新</span>
+        <span>穿越</span>
+    </div>
+</div>
+<{empty name="list"}>
+<div class="no_info order_info">
+    <p>暂无订单</p>
+</div>
+<{else /}>
+<div class="main" id="content" data-page="2" data-hasend="0"
+    data-path="<{$Think.server.request_uri}>?<{$Think.server.query_string}>&ajax=1">
+    <{include file='public/shuoshuo_item'/}>
+</div>
+<div class="page_loading" id="page-loading">正在加载...</div>
+<{/empty}>
+<{include file='public/_footer' /}>
