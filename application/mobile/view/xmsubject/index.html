@@ -1,0 +1,112 @@
+<{layout name="layout/layout" /}>
+<{load href="/static/mobile/css/xmsubject.css" /}> 
+<{load href="/static/mobile/js/xmsubject.js" /}> 
+<div class="weui-form">
+    <{volist name='list' id='sbj' empty="暂时没有数据" key="sbj_index"}>
+    <div class="weui-cells__group weui-cells__group_form" id="form_group_<{$sbj.id}>">
+        <div class="weui-cells__title sub-tit">
+            <span class="must-star">*</span>
+            <{empty name=":input('page')"}>
+            <{assign name='cur_page' value="0"}>
+            <{else /}>
+            <{assign name='cur_page' value=":input('page') - 1" }>
+            <{/empty}>
+            <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span>
+            <{notempty name='sbj.answer'}>
+            <{assign name='answer_arr' value=':json_decode($sbj.answer, true)'}>
+            <{/notempty}>
+        </div>
+        <{notempty name='answer_arr'}>
+        <div class="weui-cells weui-cells_radio">
+            <{volist name='answer_arr' id='answer' key="as_index"}>
+            <label class="weui-cell weui-check__label" for="x<{$sbj.id . '_' . $as_index}>">
+                <div class="weui-cell__bd">
+                    <p><{$answer['a']}>、<{$answer['t']}></p>
+                </div>
+                <div class="weui-cell__ft">
+                    <input type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>">
+                    <span class="weui-icon-checked"></span>
+                </div>
+            </label>
+            <{/volist}>
+        </div>
+        <{else /}>
+        <div class="weui-cells__title">答案异常，请联系管理员</div>
+        <{/notempty}>
+    </div>
+    <{/volist}>
+    <{$list->render()}>
+    <!--
+    <div class="weui-cells__group weui-cells__group_form">
+        <div class="weui-cells__title sub-tit">
+            <span class="must-star">*</span>
+            <span>2、四大文明古国中的，四大文明是下列选项中的哪四个（）？</span>
+        </div>
+        <div class="weui-cells weui-cells_checkbox">
+            <label class="weui-cell weui-check__label" for="s12">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="checkbox1" class="weui-check" id="s12">
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>A、中国</p>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="s13">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="checkbox1" class="weui-check" id="s13">
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>B、中国</p>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="s14">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="checkbox1" class="weui-check" id="s14">
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>C、阿拉斯加</p>
+                </div>
+            </label>
+            <label class="weui-cell weui-check__label" for="s14">
+                <div class="weui-cell__hd">
+                    <input type="checkbox" name="checkbox1" class="weui-check" id="s14">
+                    <i class="weui-icon-checked"></i>
+                </div>
+                <div class="weui-cell__bd">
+                    <p>D、美索不达</p>
+                </div>
+            </label>
+        </div>
+    </div>
+    <div class="weui-cells__group weui-cells__group_form">
+        <div class="weui-cells__title sub-tit">
+            <span class="must-star">*</span>
+            <span>3、史记的作者是？</span>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" placeholder="请输入文本">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="weui-cells__group weui-cells__group_form">
+        <div class="weui-cells__title sub-tit">
+            <span class="must-star">*</span>
+            <span>4、请简述发生火灾时的操作规范。</span>
+        </div>
+        <div class="weui-cells weui-cells_form">
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <textarea class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+                    <div class="weui-textarea-counter"><span>0</span>/200</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    -->
+</div>

@@ -2,7 +2,6 @@
 namespace app\mobile\controller;
 
 use think\Controller;
-use think\Db;
 
 class Common extends Controller
 {
@@ -15,7 +14,6 @@ class Common extends Controller
     public function _initialize()
     {
         parent::_initialize();
-        // $company = model('common/appinfo')->find();
         $this->mobile_index_url = '/mobile';
         $this->assign('mobile_index_url', $this->mobile_index_url);
     }
