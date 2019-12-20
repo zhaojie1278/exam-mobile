@@ -24,7 +24,11 @@
                     <p><{$answer['a']}>、<{$answer['t']}></p>
                 </div>
                 <div class="weui-cell__ft">
-                    <input type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>">
+                    <{if condition="!empty($sbj.u_answer) && $sbj.u_answer == $answer['a']"}>
+                    <input sub_id="<{$sbj.id}>" u_id="<{$member['uid']}>" type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>" value="<{$answer['a']}>" checked="checked">
+                    <{else /}>
+                    <input sub_id="<{$sbj.id}>" u_id="<{$member['uid']}>" type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>" value="<{$answer['a']}>">
+                    <{/if}>
                     <span class="weui-icon-checked"></span>
                 </div>
             </label>

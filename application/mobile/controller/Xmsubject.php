@@ -7,13 +7,14 @@ class Xmsubject extends Common
 {
     public function index()
     {
-        $data = input('get.');
+        $uid = 990; // TODO
         try {
-            $this->getPageAndSize($data);
             $where['s.is_deleted'] = ['EQ', config('code.status_normal')];
+            $where['s.cid'] = config('subject.cid_thisone');
             $m_subject = new \app\common\model\Xmsubject();
-            $subjects = $m_subject->getAllByPage($where);
+            $subjects = $m_subject->getAllByPage($where, $uid);
             $this->assign(['list' => $subjects]);
+            $this->assign('member', array('uid' => $uid));
         } catch (\Exception $e) {
             Log::error('subject----->'.$e->getCode().':'.$e->getMessage());
             $this->error('查询失败，请联系管理员', 'Error/error404');

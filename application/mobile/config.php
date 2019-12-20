@@ -9,7 +9,7 @@
 return [
     //分页配置
     'paginate' => [
-        'type'      => 'bootstrap',
+        'type'      => 'page\Page',
         'var_page'  => 'page',
         'list_rows' => 5,
     ],

@@ -11,19 +11,20 @@ namespace app\common\model;
 class Xmsubject extends Base {
 
     protected $table = 'xm_subject';
-    protected $createTime = 'create_at';
-    protected $autoWriteTimestamp = false;
+    // protected $createTime = 'create_at';
+    // protected $autoWriteTimestamp = false;
 
     /**
      * 获取列表，分页
      */
-    public function getAllByPage($condition = [])
+    public function getAllByPage($condition = [], $uid)
     {
         $order = ['s.id' => 'DESC'];
         $subjects = $this
             ->alias('s')
             ->join('xm_subject_class c', 's.cid=c.id')
-            ->field('s.*,c.name as class_name')
+            ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'", "LEFT")
+            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer')
             ->where($condition)
             ->order($order)
             ->paginate(config('paginate.list_rows'),true);
@@ -32,13 +33,8 @@ class Xmsubject extends Base {
 
     // 获取单条
     public function getById($condition) {
-        $order = ['s.id' => 'DESC'];
         $subject = $this
-            ->alias('s')
-            ->join('xm_subject_class c', 's.c_id=a.id')
-            ->field('s.*,a.name as class_name')
             ->where($condition)
-            ->order($order)
             ->find();
         return $subject;
     }
