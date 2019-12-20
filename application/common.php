@@ -31,6 +31,20 @@ function show($status, $message, $data = [], $httpcode = 200) {
     return json($data, $httpcode);
 }
 
+/**
+ * 通用化数据整合
+ * @param int $status 业务状态码
+ */
+function show_arr($status, $message = '', $data = [], $httpcode = 200) {
+    $data = [
+        'status' => $status,
+        'message' => $message,
+        'data' => $data,
+        'httpcode' => $httpcode,
+    ];
+    return $data;
+}
+
 /** 
  * 计算几分钟前、几小时前、几天前、几月前、几年前。 
  * $agoTime string Unix时间 

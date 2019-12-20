@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: Administrator
@@ -8,8 +9,8 @@
 
 namespace app\common\model;
 
-class Xmsubject extends Base {
-
+class Xmsubject extends Base
+{
     protected $table = 'xm_subject';
     // protected $createTime = 'create_at';
     // protected $autoWriteTimestamp = false;
@@ -24,15 +25,16 @@ class Xmsubject extends Base {
             ->alias('s')
             ->join('xm_subject_class c', 's.cid=c.id')
             ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'", "LEFT")
-            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer')
+            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer,ps.is_mark')
             ->where($condition)
             ->order($order)
-            ->paginate(config('paginate.list_rows'),true);
+            ->paginate(config('paginate.list_rows'), true);
         return $subjects;
     }
 
     // 获取单条
-    public function getById($condition) {
+    public function getById($condition)
+    {
         $subject = $this
             ->where($condition)
             ->find();

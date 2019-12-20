@@ -17,19 +17,25 @@ class Page extends Paginator
 
     //上一页
     protected function prev() {
+        /*
         if ($this->currentPage() > 1) {
-            return "<a href='" . $this->url($this->currentPage - 1) . "' title='上一页'>上一页</a>";
+            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage - 1) . "' title='上一页'>上一页</a>";
         } else {
             return "<p>上一页</p>";
         }
+        */
+
+        return '';
     }
 
     //下一页
     protected function next() {
         if ($this->hasMore) {
-            return "<a href='" . $this->url($this->currentPage + 1) . "' title='下一页'>下一页</a>";
+            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage + 1) . "' title='下一页'>下一页</a>";
         } else {
-            return"<p>下一页</p>";
+            // return"<p>下一页</p>";
+            $sub_subject_url = url('mobile/xmsubject/commitsub');
+            return"<a class='weui-btn weui-btn_primary commitsub' href='" . $sub_subject_url . "' title='提交考卷'>提交考卷</a>";
         }
     }
 
@@ -217,6 +223,10 @@ class Page extends Paginator
                 height:40px;
                 padding:20px 0px;
             }
+            .pagination a {
+                width: 90%;
+            }
+            /*
             .pagination a{
                 display:block;
                 float:left;
@@ -240,6 +250,7 @@ class Page extends Paginator
                 background:#077ee3;
                 color:#fff;
             }
+            */
             .pagination p{
                 float:left;
                 padding:2px 12px;

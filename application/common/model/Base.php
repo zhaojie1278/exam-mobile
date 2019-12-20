@@ -95,7 +95,7 @@ class Base extends Model {
      */
     public function getCount($statusField = true) {
         if ($statusField) {
-            $where = ['status'=>config('code.status_normal')];
+            $where = ['is_deleted'=>config('code.status_normal')];
         } else {
             $where = [];
         }
@@ -115,5 +115,31 @@ class Base extends Model {
     {
         $one = $this->where($where)->find();
         return $one;
+    }
+
+    // 获取所有
+    public function getAll($where) {
+        $all_d = $this->where($where)->select();
+        return $all_d;
+    }
+
+    
+
+    // 获取所有ID
+    public function getAllIds($where, $id_field = 'id') {
+        $all_d = $this->where($where)->column($id_field);
+        return $all_d;
+    }
+
+    
+    /**
+     * 获取总数
+     */
+    public function getCountByCondition($where, $statusField = true) {
+        if ($statusField) {
+            $where['is_deleted'] = config('code.status_normal');
+        }
+        $count = $this->where($where)->count('id');
+        return $count;
     }
 }

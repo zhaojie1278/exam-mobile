@@ -13,7 +13,7 @@ class Xmsubpaper extends Base {
     protected $table = 'xm_subject_paper';
     protected $createTime = 'create_at';
     // protected $autoWriteTimestamp = false;
-
+    protected $autoWriteTimestamp = 'datetime';
     
     // 获取单条
 }

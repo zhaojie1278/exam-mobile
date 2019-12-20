@@ -2,6 +2,7 @@
 namespace app\api\controller;
 
 use think\Controller;
+use think\Session;
 
 /**
  * API模块公共控制器
@@ -12,6 +13,8 @@ class Common extends Controller {
     public $page = 1;
     public $size = 5;
     public $from = 0;
+
+    public $uid = 0; // TODO session
 
     /**
      * Header 头
@@ -24,6 +27,14 @@ class Common extends Controller {
     public function _initialize() {
         // $this->checkRequestAuth(); // todo
         // $this->testAes();
+
+        if (Session::get('member.uid')) {
+            $this->uid = Session::get('member.uid');
+        } else {
+            echo json_encode(show_arr(config('code.error'), '您尚未登录，请登录后操作', 
+                ['rs_login_url' => url('mobile/login/index')], 200));
+                exit;
+        }
     }
 
     /**

@@ -2,9 +2,12 @@
 namespace app\mobile\controller;
 
 use think\Controller;
+use think\Session;
 
 class Common extends Controller
 {
+
+    public $uid = 0; // TODO session
     public $mobile_index_url = '';
     // 分页相关
     public $page_index = 1;
@@ -15,6 +18,15 @@ class Common extends Controller
     {
         parent::_initialize();
         $this->mobile_index_url = '/mobile';
+        if (Session::get('member.uid')) {
+            $this->uid = Session::get('member.uid');
+        } else {
+            Session::set('member.uid', '100002');
+            // $this->uid = 100002;
+
+            // 未登录
+            $this->redirect('mobile/login/index');
+        }
         $this->assign('mobile_index_url', $this->mobile_index_url);
     }
 
