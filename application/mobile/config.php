@@ -13,4 +13,5 @@ return [
         'var_page'  => 'page',
         'list_rows' => 5,
     ],
+    'url_common_param'=>true
 ];

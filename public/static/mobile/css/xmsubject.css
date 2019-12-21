@@ -26,3 +26,26 @@ html {
 .mark {
     
 }
+
+.erweima {
+    margin-top: 15px;
+}
+.erweima img {
+    width: 60%;
+}
+
+.erweima-tip {
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.pre-notice {
+    white-space:pre-wrap; /* css3.0 */ 
+    white-space:-moz-pre-wrap; /* Firefox */ 
+    white-space:-pre-wrap; /* Opera 4-6 */ 
+    white-space:-o-pre-wrap; /* Opera 7 */ 
+    word-wrap:break-word; /* Internet Explorer 5.5+ */ 
+    text-indent: 15px;
+    text-align: justify;
+    color: #666
+}

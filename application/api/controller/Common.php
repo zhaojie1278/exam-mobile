@@ -14,7 +14,8 @@ class Common extends Controller {
     public $size = 5;
     public $from = 0;
 
-    public $uid = 0; // TODO session
+    public $uid = 0;
+    public $subject_cid = 0;
 
     /**
      * Header 头
@@ -30,6 +31,7 @@ class Common extends Controller {
 
         if (Session::get('member.uid')) {
             $this->uid = Session::get('member.uid');
+            $this->subject_cid = Session::get('member.subject_cid');
         } else {
             echo json_encode(show_arr(config('code.error'), '您尚未登录，请登录后操作', 
                 ['rs_login_url' => url('mobile/login/index')], 200));

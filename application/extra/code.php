@@ -19,4 +19,5 @@ return [
     'check_pass' => 1, // 审核通过
     'check_uncheck' => 0, // 未审核
     'check_reject' => 2, //审核拒绝
+    'user_status_normal' => 1, // 用户状态：正常
 ];

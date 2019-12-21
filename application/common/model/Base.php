@@ -111,9 +111,13 @@ class Base extends Model {
     /**
      * 获取单条
      */
-    public function getOne($where)
+    public function getOne($where, $order = '')
     {
-        $one = $this->where($where)->find();
+        if ($order) {
+            $one = $this->where($where)->order($order)->find();
+        } else {
+            $one = $this->where($where)->find();
+        }
         return $one;
     }
 
@@ -128,6 +132,12 @@ class Base extends Model {
     // 获取所有ID
     public function getAllIds($where, $id_field = 'id') {
         $all_d = $this->where($where)->column($id_field);
+        return $all_d;
+    }
+
+    // 获取指定 column
+    public function getAllColumns($where, $columns = 'id') {
+        $all_d = $this->where($where)->column($columns);
         return $all_d;
     }
 

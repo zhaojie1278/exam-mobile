@@ -1,0 +1,14 @@
+<{layout name="layout/layout" /}>
+<{load href="/static/mobile/css/xmsubject.css" /}> 
+<{load href="/static/mobile/js/xmsubject.js" /}> 
+<div class="weui-msg">
+    <div class="weui-msg__text-area">
+      <h2 class="weui-msg__title">考试须知</h2>
+      <pre class="weui-msg__desc pre-notice"><{$notice.content}></pre>
+    </div>
+    <div class="weui-msg__opr-area">
+      <p class="weui-btn-area">
+        <a href="<{:url('mobile/xmsubject/index',['read_notice_id' => $notice.id])}>" class="weui-btn weui-btn_primary">我已阅读</a>
+      </p>
+    </div>
+  </div>

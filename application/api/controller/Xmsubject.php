@@ -11,7 +11,7 @@ class Xmsubject extends Common
     // 已交卷判定
     private function isSubDone() {
         $m_paper = new \app\common\model\Xmsubpaper();
-        $m_paper_whe['cid'] = config('subject.cid_thisone');
+        $m_paper_whe['cid'] = $this->subject_cid;
         $m_paper_whe['uid'] = $this->uid;
         $xm_paper = $m_paper->getOne($m_paper_whe);
         $this->done_xm_paper = $xm_paper;
@@ -51,7 +51,8 @@ class Xmsubject extends Common
                     'score' => $xm_subject['score'],
                     'do_time' => time(),
                     'u_answer' => $answer,
-                    'is_right' => $is_right
+                    'is_right' => $is_right,
+                    'is_doned' => 1
                 );
                 $rs = $m_paper_single->edit($edit_data);
             } else {
@@ -63,7 +64,8 @@ class Xmsubject extends Common
                     'do_time' => time(),
                     'u_answer' => $answer,
                     'cid' => $xm_subject['cid'],
-                    'is_right' => $is_right
+                    'is_right' => $is_right,
+                    'is_doned' => 1
                 );
                 $rs = $m_paper_single->add($add_data);
             }
@@ -104,16 +106,22 @@ class Xmsubject extends Common
                 $edit_data = array(
                     'id' => $m_old_paper['id'],
                     'is_mark' => $is_mark ? 0 : 1,
-                    'mark_time' => time()
+                    'mark_time' => time(),
+                    'is_marked' => 1
                 );
                 $rs = $m_paper_single->edit($edit_data);
             } else {
+                $is_right = $xm_subject['check_answer'] == '' ? 1 : 0;
                 $add_data = array(
                     'sub_id' => $sub_id,
                     'uid' => $this->uid,
                     'cid' => $xm_subject['cid'],
                     'is_mark' => $is_mark ? 0 : 1,
-                    'mark_time' => time()
+                    'mark_time' => time(),
+                    's_answer' => $xm_subject['check_answer'],
+                    'score' => $xm_subject['score'],
+                    'is_right' => $is_right,
+                    'is_marked' => 1
                 );
                 $rs = $m_paper_single->add($add_data);
             }
@@ -122,7 +130,7 @@ class Xmsubject extends Common
             }
             $rs_data = ['u_id' => $this->uid, 'do_rs' => $rs];
         } catch(\Exception $e) {
-            return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
+            return show(config('code.error'), '系统异常，请联系管理员或稍后重试'.$e->getLine(), [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
     }
@@ -139,22 +147,26 @@ class Xmsubject extends Common
         try {
             // 已做题目
             $m_single = new \app\common\model\Xmsubpapersingle();
-            $m_paper_sg_whe['cid'] = config('subject.cid_thisone');
+            $m_paper_sg_whe['cid'] = $this->subject_cid;
             $m_paper_sg_whe['uid'] = $this->uid;
+            $m_paper_sg_whe['u_answer'] = ['NEQ', ''];
             $do_subs = $m_single->getAll($m_paper_sg_whe);
-            $do_sub_count = count($do_subs);
+            $do_sub_count = count($do_subs) + 0;
             
             // 总试题数量
             $m_sub = new \app\common\model\Xmsubject();
-            $sub_where = ['cid' => config('subject.cid_thisone')];
-            $sub_count = $m_sub->getCountByCondition($sub_where);
+            $sub_where = ['cid' => $this->subject_cid];
+            $sub_count = $m_sub->getCountByCondition($sub_where) + 0;
 
             Log::record('do_sub_count:'.$do_sub_count.'; sub_count:'.$sub_count);
 
+            $undo_count = $sub_count - $do_sub_count;
+
             if ($do_sub_count != $sub_count) {
-                return show(config('code.error'), '试题尚未完成，您确认交卷吗？', ['isprompt' => 1], 200);
+                return show(config('code.error'), '您还剩余 '.$undo_count.' 题未做，您确认交卷吗？', ['isprompt' => 1], 200);
             }
         } catch(\Exception $e) {
+            Log::record('------->error:'.$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
         }
         return show(config('code.success'), 'OK');
@@ -172,25 +184,27 @@ class Xmsubject extends Common
         try {
             // 已做试题
             $m_single = new \app\common\model\Xmsubpapersingle();
-            $m_paper_sg_whe['cid'] = config('subject.cid_thisone');
+            $m_paper_sg_whe['cid'] = $this->subject_cid;
             $m_paper_sg_whe['uid'] = $this->uid;
             $do_subs = $m_single->getAll($m_paper_sg_whe);
 
             // 总试题数量
             $m_sub = new \app\common\model\Xmsubject();
-            $sub_where = ['cid' => config('subject.cid_thisone'), 'is_deleted' => config('code.status_normal')];
-            $sub_ids = $m_sub->getAllIds($sub_where);
+            $sub_where = ['cid' => $this->subject_cid, 'is_deleted' => config('code.status_normal')];
+
+            $columns = 'id,check_answer';
+            $sub_id_answers = $m_sub->getAllColumns($sub_where, $columns);
 
             $analy_rs = $m_single->analyPaperSingles($do_subs);
             $m_paper = new \app\common\model\Xmsubpaper();
             $paper_data = array(
-                'sub_id' =>  $sub_ids ? json_encode($sub_ids) : null,
-                's_answer' => $analy_rs['s_answers'],
+                'sub_id' =>  $sub_id_answers ? json_encode(array_keys($sub_id_answers)) : null,
+                's_answer' => $sub_id_answers ? json_encode($sub_id_answers) : null,
                 'uid' => $this->uid,
                 'time' => time(), // TODO
                 'u_answer' => $analy_rs['u_answers'],
                 'score' => $analy_rs['sum_score'],
-                'cid' => config('subject.cid_thisone'),
+                'cid' => $this->subject_cid,
                 'right_pre' => $analy_rs['right_pre'],
             );
 

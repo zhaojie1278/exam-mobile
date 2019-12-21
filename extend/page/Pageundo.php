@@ -3,7 +3,7 @@ namespace page;
 
 use think\Paginator;
 
-class Page extends Paginator
+class Pageundo extends Paginator
 {
 
     //首页
@@ -17,13 +17,13 @@ class Page extends Paginator
 
     //上一页
     protected function prev() {
-        /*
-        if ($this->currentPage() > 1) {
-            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage - 1) . "' title='上一页'>上一页</a>";
+        
+        /* if ($this->currentPage() > 1) {
+            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage) . "' title='上一页'>上一页</a>";
         } else {
-            return "<p>上一页</p>";
-        }
-        */
+            return "";
+        } */
+       
 
         return '';
     }

@@ -1,10 +1,11 @@
 <{layout name="layout/layout" /}>
-<{load href="/static/mobile/css/xmsubject.css" /}> 
-<{load href="/static/mobile/js/xmsubject.js" /}> 
+<link rel="stylesheet" type="text/css" href="__STATIC__/mobile/css/xmsubject.css?v=<{:time()}>" />
+<script src="__STATIC__/lib/timedown.js?v=<{:time()}>"></script>
+<script src="__STATIC__/mobile/js/xmsubject.js?v=<{:time()}>"></script>
 <div class="weui-form">
     <{empty name='list'}>
     <div class="weui-loadmore weui-loadmore_line">
-        <span class="weui-loadmore__tips">暂无数据</span>
+        <span class="weui-loadmore__tips">暂无试题</span>
     </div>
     <{else /}>
     <{volist name='list' id='sbj' key="sbj_index"}>
@@ -18,17 +19,17 @@
             <{/empty}>
             <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span>
             <{eq name='sbj.is_mark' value='1'}>
-            <span id="mark_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>">取消标注</span>
+            <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>" style="color: #666666;">取消标注</span>
             <{else /}>
-            <span id="mark_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>">标注一下</span>
+            <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="0">标注一下</span>
             <{/eq}>
             <{notempty name='sbj.answer'}>
             <{assign name='answer_arr' value=':json_decode($sbj.answer, true)'}>
             <{/notempty}>
         </div>
         <{notempty name='answer_arr'}>
-        <div class="weui-cells weui-cells_radio">
-            <input type="hidden" id="hidden_<{$sbj.id}>" for_radio_name='radio_<{$sbj.id}>' />
+        <div class="weui-cells weui-cells_checkbox">
+            <input type="hidden" id="hidden_sub_id_<{$sbj.id}>" for_radio_name='radio_<{$sbj.id}>' for_radio_sub_id='<{$sbj.id}>' />
             <{volist name='answer_arr' id='answer' key="as_index"}>
             <label class="weui-cell weui-check__label" for="x<{$sbj.id . '_' . $as_index}>">
                 <div class="weui-cell__bd">
@@ -51,6 +52,14 @@
     </div>
     <{/volist}>
     <{$list->render()}>
+    <div class="weui-form__text-area c-timer">
+        <span id="remainder_time_seconds" style="display: none;">
+            <{$reminder_time}>
+        </span>
+        <h3 class="weui-form__desc" id="reminder_timer">
+            <{$reminder_time_str}>
+        </h3>
+      </div>
     <{/empty}>
     <!--
     <div class="weui-cells__group weui-cells__group_form">
@@ -126,3 +135,16 @@
     </div>
     -->
 </div>
+
+<!--右侧悬浮 begin-->
+<div class="right-absolute-outer">
+    <span>查看标注 / 做题</span>
+</div>
+<div class="right-absolute-inner">
+    <a id="to_mark_subjects" href="<{:url('mobile/xmsubject/marksubjects', ['is_right_ab' => 1])}>"><{:config('subject.mark_title')}></a>
+    <a id="to_undo_subjects" href="<{:url('mobile/xmsubject/undosubjects', ['is_right_ab' => 1])}>"><{:config('subject.undo_title')}></a>
+    <a id="to_done_subjects" href="<{:url('mobile/xmsubject/donesubjects', ['is_right_ab' => 1])}>"><{:config('subject.done_title')}></a>
+    <a id="to_done_subjects" href="<{:url('mobile/xmsubject/index', ['is_right_ab' => 1])}>"><{:config('subject.all_sub_title')}></a>
+    <span class="close-right-ab-inner">关闭悬浮</span>
+</div>
+<!-- end -->

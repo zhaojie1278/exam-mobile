@@ -1,6 +1,63 @@
-<{layout name="layout/layout" /}>
+<{include file='public/_meta' /}>
+<body>
 <{load href="/static/mobile/css/login.css" /}> 
 <{load href="/static/mobile/js/login.js" /}> 
-<div>
-    This is Login page.
+<div class="page form_page js_show">
+    <p class="weui-form">
+        <div class="weui-form__text-area">
+            <h2 class="weui-form__title">考试系统1.0</h2>
+            <div class="weui-form__desc">请您认真作答，考试系统，若有问题，请随时咨询老师，如果手机打不开，请关闭页面重试几次。</div>
+        </div>
+        <div class="weui-form__control-area">
+            <div class="weui-cells__group weui-cells__group_form">
+                <div class="weui-cells__title">请认真填写以下必填项目</div>
+                <div class="weui-cells weui-cells_form">
+                    <div class="weui-cell weui-cell_select">
+                        <div class="weui-cell__hd"><label class="weui-label">考试科目</label></div>
+                        <div class="weui-cell__bd">
+                            <select class="weui-select" name="cid">
+                                <option value="0">选择科目</option>
+                                <{volist name='subject_class_list' id='sbj'}>
+                                <option value="<{$sbj.id}>"><{$sbj.name}></option>
+                                <{/volist}>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">学号</label></div>
+                        <div class="weui-cell__bd">
+                            <input id="class_no" class="js_input weui-input" placeholder="填输入您的学号">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">姓名</label></div>
+                        <div class="weui-cell__bd">
+                            <input id="real_name" class="js_input weui-input" placeholder="填输入您的姓名">
+                        </div>
+                    </div>
+                    <div class="weui-cell">
+                        <div class="weui-cell__hd"><label class="weui-label">手机号</label></div>
+                        <div class="weui-cell__bd">
+                            <input id="phone" class="js_input weui-input" placeholder="请输入您的手机号" type="number" pattern="[0-9]*" maxlength="11">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="weui-form__tips-area">
+            <p class="weui-form__tips">
+                请填写完整后登录
+            </p>
+        </div>
+        <div class="weui-form__opr-area">
+            <a class="weui-btn weui-btn_disabled weui-btn_default" href="javascript:" id="login_btn">登录</a>
+        </div>
+        <div class="weui-form__extra-area">
+            <div class="weui-footer">
+                <p class="weui-footer__text">Copyright © 2019 久萃教育</p>
+            </div>
+        </div>
+    </p>
 </div>
+</body>
+</html>

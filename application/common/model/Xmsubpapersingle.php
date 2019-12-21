@@ -23,13 +23,13 @@ class Xmsubpapersingle extends Base
         }
 
         // $sub_ids = array();
-        $s_answers = array();
+        // $s_answers = array();
         $u_answers = array();
         $sum_score = 0;
         $right_pre = 0;
         foreach ($paper_singles as $pap_s) {
-            $sub_ids[] = $pap_s['sub_id'];
-            $s_answers[$pap_s['sub_id']] = $pap_s['s_answer'];
+            // $sub_ids[] = $pap_s['sub_id'];
+            // $s_answers[$pap_s['sub_id']] = $pap_s['s_answer'];
             $u_answers[$pap_s['sub_id']] = $pap_s['u_answer'];
             if ($pap_s['s_answer'] == $pap_s['u_answer']) {
                 // 答案正确
@@ -39,15 +39,20 @@ class Xmsubpapersingle extends Base
         }
 
         // $sub_ids = $sub_ids ? json_encode($sub_ids) : null;
-        $s_answers = $s_answers ? json_encode($s_answers) : null;
+        // $s_answers = $s_answers ? json_encode($s_answers) : null;
         $u_answers = $u_answers ? json_encode($u_answers) : null;
         $rs = array(
             // 'sub_ids' => $sub_ids,
-            's_answers' => $s_answers,
+            // 's_answers' => $s_answers,
             'u_answers' => $u_answers,
             'sum_score' => $sum_score,
             'right_pre' => $right_pre,
         );
         return $rs;
+    }
+
+    // 生成个人试卷
+    public function generateMemberSPSingle($sub_cid, $uid) {
+
     }
 }
