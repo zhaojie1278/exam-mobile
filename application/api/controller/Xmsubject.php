@@ -197,25 +197,47 @@ class Xmsubject extends Common
 
             $analy_rs = $m_single->analyPaperSingles($do_subs);
             $m_paper = new \app\common\model\Xmsubpaper();
+
+            // 考试花费时间
+            $do_cost_time = 0;
+            $subc_begin = $this->subject_class['begin_time'];
+            $subc_end = $this->subject_class['end_time'];
+            $do_subc_time = 0;
+            $now_time = time();
+
+
+            Log::record('$do_subc_time::'.$do_subc_time);
+            Log::record('$subc_end::'.$subc_end);
+            Log::record('$subc_begin::'.$subc_begin);
+            Log::record('$now_time::'.$now_time);
+            if ($subc_end != 0 && $subc_begin != 0) {
+                if ($now_time <= $subc_end) {
+                    $do_subc_end = $now_time;
+                } else {
+                    $do_subc_end = $subc_end;
+                }
+                $do_subc_time = $do_subc_end - $subc_begin;
+            }
+
             $paper_data = array(
                 'sub_id' =>  $sub_id_answers ? json_encode(array_keys($sub_id_answers)) : null,
                 's_answer' => $sub_id_answers ? json_encode($sub_id_answers) : null,
                 'uid' => $this->uid,
-                'time' => time(), // TODO
+                'time' => $do_subc_time,
                 'u_answer' => $analy_rs['u_answers'],
                 'score' => $analy_rs['sum_score'],
                 'cid' => $this->subject_cid,
-                'right_pre' => $analy_rs['right_pre'],
+                'right_count' => $analy_rs['right_count'],
+                'right_pre' => round($analy_rs['right_count'] / count($sub_id_answers), 2) * 100,
             );
 
-           
             $rs = $m_paper->add($paper_data);
             if (!$rs) {
                 return show(config('code.error'), '提交失败，请稍后重试或联系管理员', [], 500);
             }
             $rs_data = ['u_id' => $this->uid, 'do_rs' => $rs, 'a_href' => url('mobile/xmsubject/commitafter')];
         } catch(\Exception $e) {
-            return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
+            return show(config('code.error'), '系统异常，请联系管理员或稍后重试'.$e->getMessage(), [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
     }

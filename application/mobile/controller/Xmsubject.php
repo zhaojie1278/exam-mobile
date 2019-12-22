@@ -220,8 +220,26 @@ class Xmsubject extends Common
     // 提交试卷
     public function commitafter() {
         // 试卷题目是否做完
-
         
+        $is_open_score = $this->subject_class['is_open_score'];
+        if (!empty($is_open_score) && $is_open_score) {
+            $m_paper = new \app\common\model\Xmsubpaper();
+            $m_paper_whe['cid'] = $this->subject_cid;
+            $m_paper_whe['uid'] = $this->uid;
+            $xm_paper = $m_paper->getOne($m_paper_whe);
+
+            $this->assign('sub_paper', $xm_paper);
+            $this->assign('sub_count', $xm_paper['sub_id'] ? count(json_decode($xm_paper['sub_id'], true)) : 0);
+            $this->assign('do_count', $xm_paper['u_answer'] ? count(json_decode($xm_paper['u_answer'], true)) : 0);
+            $this->assign('right_count', $xm_paper['right_count'] ? $xm_paper['right_count'] : 0);
+
+            $right_per = $xm_paper['right_pre'] ? $xm_paper['right_pre'] : 0;
+            $this->assign('right_percent', $right_per);
+            
+            $this->assign('is_open_score', $is_open_score);
+        } else {
+            $this->assign('is_open_score', 0);
+        }
         return $this->fetch();
     }
 }

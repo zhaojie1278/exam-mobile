@@ -42,6 +42,7 @@ button,
 input,
 select,
 textarea,
+pre,
 p {
     font-family: 'Microsoft YaHei', '微软雅黑', "Helvetica Neue", Tahoma, Arial, sans-serif;
     margin: 0;

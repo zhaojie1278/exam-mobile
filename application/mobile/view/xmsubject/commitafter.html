@@ -5,7 +5,12 @@
     <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
     <div class="weui-msg__text-area">
       <h2 class="weui-msg__title">交卷成功</h2>
+      <{empty name='is_open_score'}>
       <p class="weui-msg__desc">考试结果请等待通知</p>
+      <{else /}>
+      <p class="weui-msg__desc subject_result">本次考试正确率<{$right_percent}>%</p>
+      <p class="weui-msg__desc">得分<{$sub_paper['score']}>，共<{$sub_count}>题，已做<{$do_count}>题</p>
+      <{/empty}>
       <p class="erweima">
         <img src="__STATIC__/mobile/images/erweima.png" />
       </p>

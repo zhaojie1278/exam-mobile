@@ -47,5 +47,12 @@ html {
     word-wrap:break-word; /* Internet Explorer 5.5+ */ 
     text-indent: 15px;
     text-align: justify;
-    color: #666
+    color: #666;
+    /* letter-spacing: 2px; */
+    font-size: 16px;
+}
+
+.subject_result {
+    font-size: 16px;
+    color: #000;
 }

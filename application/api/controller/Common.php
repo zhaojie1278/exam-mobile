@@ -16,6 +16,7 @@ class Common extends Controller {
 
     public $uid = 0;
     public $subject_cid = 0;
+    public $subject_class = [];
 
     /**
      * Header 头
@@ -32,6 +33,13 @@ class Common extends Controller {
         if (Session::get('member.uid')) {
             $this->uid = Session::get('member.uid');
             $this->subject_cid = Session::get('member.subject_cid');
+
+            if ($this->subject_cid) {
+                $m_sub_class = new \app\common\model\Xmsubjectclass();
+                $sub_cla_whe = ['id' => $this->subject_cid];
+                $sub_class = $m_sub_class->getOne($sub_cla_whe);
+                $this->subject_class = $sub_class;
+            }
         } else {
             echo json_encode(show_arr(config('code.error'), '您尚未登录，请登录后操作', 
                 ['rs_login_url' => url('mobile/login/index')], 200));
