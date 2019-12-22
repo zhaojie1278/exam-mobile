@@ -20,13 +20,13 @@ class Xmsubject extends Base
      */
     public function getAllByPage($condition = [], $uid, $page_config = array(), $where_query = null)
     {
-        $order = ['s.id' => 'DESC'];
+        $order = ['ps.id' => 'ASC'];
         if (!empty($where_query)) {
             $subjects = $this
             ->alias('s')
             ->join('xm_subject_class c', 's.cid=c.id')
-            ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'", "LEFT")
-            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer,ps.is_mark')
+            ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'")
+            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer,ps.is_mark,ps.sub_order_i')
             ->where($condition)
             ->where(function($query) use ($where_query){
                 $query->where($where_query);
@@ -37,8 +37,8 @@ class Xmsubject extends Base
             $subjects = $this
             ->alias('s')
             ->join('xm_subject_class c', 's.cid=c.id')
-            ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'", "LEFT")
-            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer,ps.is_mark')
+            ->join('xm_subject_paper_single ps', "s.id=ps.sub_id and ps.uid='$uid'")
+            ->field('s.*,c.name as class_name,ps.uid,ps.u_answer,ps.is_mark,ps.sub_order_i')
             ->where($condition)
             ->order($order)
             ->paginate(config('paginate.list_rows'), true, $page_config);

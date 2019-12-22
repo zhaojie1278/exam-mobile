@@ -122,8 +122,12 @@ class Base extends Model {
     }
 
     // 获取所有
-    public function getAll($where) {
-        $all_d = $this->where($where)->select();
+    public function getAll($where, $fields = '') {
+        if ($fields) {
+            $all_d = $this->where($where)->field($fields)->select();
+        } else {
+            $all_d = $this->where($where)->select();
+        }
         return $all_d;
     }
 

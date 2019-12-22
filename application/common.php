@@ -109,3 +109,12 @@ function time_remainder($time)
     }
     return $strtime;
 }
+
+
+/**
+ * 中间加密 用正则
+ */
+function encrypt_sub_phone($tel) {
+    $new_tel = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $tel);
+    return $new_tel;
+}

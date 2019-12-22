@@ -52,7 +52,57 @@ class Xmsubpapersingle extends Base
     }
 
     // 生成个人试卷
-    public function generateMemberSPSingle($sub_cid, $uid) {
+    public function generateMemberSPSingle($sub_all, $uid, $subject_class_cid, $is_rand) {
 
+        if (empty($sub_all) || empty($uid) || empty($subject_class_cid)) {
+            return false;
+        }
+
+        $add_data = array();
+
+        $add_subs = array();
+        if ($sub_all) {
+            if ($is_rand) {
+                // 打乱试题
+                shuffle( $sub_all );
+            }
+        }
+
+        $sub_order_i = 1;
+        foreach($sub_all as $sub) {
+            $sub_id = $sub['id'];
+            $old_pap_whe = ['sub_id' => $sub_id, 'uid' => $uid, 'cid' => $subject_class_cid];
+            $m_old_paper_s = $this->getOne($old_pap_whe);
+            $sub_check_answer = $sub['check_answer'];
+            $sub_score = $sub['score'];
+            $sub_cid = $sub['cid'];
+            if (empty($m_old_paper_s)) {
+                $add_data[] = array(
+                    'sub_order_i' => $sub_order_i,
+                    'sub_id' => $sub['id'],
+                    's_answer' => $sub_check_answer,
+                    'uid' => $uid,
+                    'score' => $sub_score,
+                    'cid' => $sub_cid,
+                );
+                $sub_order_i++;
+            } else {
+               /* $edit_data = array(
+                    'id' => $m_old_paper_s['id'],
+                    's_answer' => $sub_check_answer,
+                    'uid' => $uid,
+                    'score' => $$sub_score,
+                    'cid' => $sub_cid,
+                );
+                $rs = $this->edit($edit_data); */
+            }
+        }
+
+        if ($add_data) {
+            $rs = $this->addAll($add_data);
+        } else {
+            $rs = true;
+        }
+        return $rs;
     }
 }

@@ -12,12 +12,13 @@
     <div class="weui-cells__group weui-cells__group_form" id="form_group_<{$sbj.id}>">
         <div class="weui-cells__title sub-tit">
             <span class="must-star">*</span>
-            <{empty name=":input('page')"}>
+            <!-- <{empty name=":input('page')"}>
             <{assign name='cur_page' value="0"}>
             <{else /}>
             <{assign name='cur_page' value=":input('page') - 1" }>
-            <{/empty}>
-            <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span>
+            <{/empty}> -->
+            <!-- <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span> -->
+            <span><{$sbj.sub_order_i}>、<{$sbj.question}>？</span>
             <{eq name='sbj.is_mark' value='1'}>
             <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>" style="color: #666666;">取消标注</span>
             <{else /}>

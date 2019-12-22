@@ -11,9 +11,9 @@ class Login extends Controller
     public function dologin() {
         $data = input('post.');
         try {
-            $class_no = $data['class_no'] . '';
-            $real_namne = $data['real_name'] . '';
-            $phone = $data['phone'] . '';
+            $class_no = trim($data['class_no']) . '';
+            $real_namne = trim($data['real_name']) . '';
+            $phone = trim($data['phone']) . '';
             if (strlen($phone) != 11) {
                 return show(config('code.error'), '请输入正确的手机号', [], 200);
             }
@@ -25,17 +25,24 @@ class Login extends Controller
                 'is_deleted' => config('code.status_normal'),
                 'status' => config('code.user_status_normal')
             ];
-            $xm_subject = $m_xm_member->getOne($xm_sub_whe);
-            if (empty($xm_subject['class_no'])) {
+            $member_info = $m_xm_member->getOne($xm_sub_whe);
+            if (empty($member_info['class_no'])) {
                 return show(config('code.error'), '登录失败，请校正信息后重新登录', [], 200);
             } else {
+
+                // 验证手机号
+                if (!empty($member_info['phone']) && $member_info['phone'] != $phone) {
+                    return show(config('code.error'), '登录失败，请输入上次登录时使用的手机号'.encrypt_sub_phone($member_info['phone']).'登录', [], 200);
+                }
                 // dump(Session::get('member'));
+
+                $uid = $member_info->id;
                 $nowtime = time();
-                $rs = $m_xm_member->edit(['id' => $xm_subject->id, 'login_time' => $nowtime, 'phone' => $phone]);
+                $rs = $m_xm_member->edit(['id' => $uid, 'login_time' => $nowtime, 'phone' => $phone]);
 
                 // 登录日志
                 $m_xm_member_login = new \app\common\model\Xmmemberlogin();
-                $rs_login_add = $m_xm_member_login->add(['uid' => $xm_subject->id, 'login_time' => $nowtime, 'phone' => $phone, 'class_no' => $class_no, 'real_name' => $real_namne, 'subject_cid' => $subject_cid]);
+                $rs_login_add = $m_xm_member_login->add(['uid' => $uid, 'login_time' => $nowtime, 'phone' => $phone, 'class_no' => $class_no, 'real_name' => $real_namne, 'subject_cid' => $subject_cid]);
 
                 if ($rs === false || !$rs_login_add) {
                     throw new \think\Exception('登录信息保存失败', 100006);
@@ -60,10 +67,21 @@ class Login extends Controller
                     return show(config('code.error'), '考试已结束', [], 200);
                 }
 
+                // 生成带排序的试卷
+                $m_sub = new \app\common\model\Xmsubject();
+                $sub_where = ['cid' => $subject_class['id'], 'is_deleted' => config('code.status_normal')];
+                $fields = 'id,check_answer,score,cid';
+                $sub_all = $m_sub->getAll($sub_where, $fields);
+                $m_sub_pap_single = new \app\common\model\Xmsubpapersingle();
+                $rs_generate = $m_sub_pap_single->generateMemberSPSingle($sub_all, $uid, $subject_class['id'], $subject_class['is_rand']);
+                if (!$rs_generate) {
+                    return show(config('code.error'), '考题生成失败，请联系管理员或稍后重试~', [], 200);
+                }
+
                 // session 管理
                 Session::delete('member');
                 $session_member = [
-                    'uid' => $xm_subject->id,
+                    'uid' => $uid,
                     'real_name' => $class_no,
                     'phone' => $phone,
                     'login_time' => $nowtime,
@@ -74,7 +92,7 @@ class Login extends Controller
             
             $rs_data = ['re_href' => url('mobile/xmsubject/index')];
         } catch(\Exception $e) {
-            Log::record('error->'.$e->getMessage());
+            Log::record('error->'.$e->getMessage().'---'.$e->getLine());
             return show(config('code.error'), '登录系统异常，请联系管理员或稍后重试', [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);

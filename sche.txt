@@ -97,3 +97,6 @@ xm_subject 增加 score
 xm_subject_paper_single -- 考试答案及是否标注
 
 xm_subject_class.xm_begintime / xm_endtime
+
+xm_subject_class.is_rand
+xm_subject_paper_single.sub_order_i

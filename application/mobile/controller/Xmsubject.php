@@ -15,7 +15,7 @@ class Xmsubject extends Common
         $xm_paper = $m_paper->getOne($m_paper_whe);
         $this->done_xm_paper = $xm_paper;
         if (!empty($xm_paper)) {
-            $this->success('您已交卷', 'mobile/xmsubject/commitafter');
+            $this->success('您已交卷，将为您自动跳转', 'mobile/xmsubject/commitafter');
         }
     }
     
@@ -67,7 +67,6 @@ class Xmsubject extends Common
     // 正常做题（全部试题）
     public function index()
     {
-
         // 查看是否已交卷
         $this->isSubDone();
 
