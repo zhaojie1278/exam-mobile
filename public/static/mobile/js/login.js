@@ -47,7 +47,11 @@ $(function () {
 
                 if (data.status == 0) {
                     if (undefined != data.message && data.message) {
-                        $.alert(data.message);
+                        $.alert(data.message, function(){
+                            if (data.data.re_href) {
+                                window.location.href = data.data.re_href;
+                            }
+                        });
                     } else {
                         $.alert('登录失败，请联系管理员或稍后重试');
                     }

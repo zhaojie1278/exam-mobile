@@ -2,6 +2,7 @@
 namespace app\mobile\controller;
 
 use think\Controller;
+use think\Request;
 use think\Session;
 
 class Common extends Controller
@@ -49,9 +50,16 @@ class Common extends Controller
                 $this->success('考试尚未开始', 'mobile/login/index');
             }
 
-            if ($nowtime >= $subc_end) {
-                Session::delete('member');
-                $this->success('考试已结束', 'mobile/login/index');
+            // 考试结果页不控制
+            $request = Request::instance();
+            $cur_controller = $request->controller();
+            $cur_action = $request->action();
+            
+            if (!(strtolower($cur_controller) == 'xmsubject' && strtolower($cur_action) == 'commitafter')) {
+                if ($nowtime >= $subc_end) {
+                    Session::delete('member');
+                    $this->success('考试已结束', 'mobile/login/index');
+                }   
             }
 
             $reminder_time = $subc_end - $nowtime;

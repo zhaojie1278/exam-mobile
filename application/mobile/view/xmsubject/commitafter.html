@@ -9,7 +9,7 @@
       <p class="weui-msg__desc">考试结果请等待通知</p>
       <{else /}>
       <p class="weui-msg__desc subject_result">本次考试正确率<{$right_percent}>%</p>
-      <p class="weui-msg__desc">得分<{$sub_paper['score']}>，共<{$sub_count}>题，已做<{$do_count}>题</p>
+      <p class="weui-msg__desc">得分<{$sub_paper['score'] + 0}>，共<{$sub_count}>题，已做<{$do_count}>题</p>
       <{/empty}>
       <p class="erweima">
         <img src="__STATIC__/mobile/images/weixin-public.jpg" />

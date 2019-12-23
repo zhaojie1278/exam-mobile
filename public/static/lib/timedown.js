@@ -1,11 +1,11 @@
 
 /*
 时间倒计时插件
-TimeDown.js
+timedown.js
 */
 function timedown(id, totalSeconds) {
     totalSeconds = parseInt(totalSeconds);
-    if (totalSeconds <= 0) {
+    if (totalSeconds < 0) {
         return;
     }
     //结束时间
@@ -37,7 +37,7 @@ function timedown(id, totalSeconds) {
     if (minutes > 0) {
         time_str += minutes + "分钟";
     }
-    if (seconds > 0) {
+    if (seconds >= 0) {
         time_str += seconds + "秒";
     }
 
@@ -48,8 +48,24 @@ function timedown(id, totalSeconds) {
         totalSeconds = totalSeconds - 1;
         timedown(id, totalSeconds);
     }, 1000);
-
     if (totalSeconds <= 0) {
+
         clearTimeout(timer_id);
+
+        $.modal({
+            title: "提示",
+            text: "考试已结束，3秒后，系统将自动为您交卷",
+            buttons: [
+              { text: '' },
+            ]
+          });
+        var timer_id2 = setTimeout(function () {
+            clearTimeout(timer_id2);
+            dosubcommit_redirect();
+        }, 3000);
+        return;
+
+        document.getElementById(id).innerHTML = '';
+        
     }
 }
