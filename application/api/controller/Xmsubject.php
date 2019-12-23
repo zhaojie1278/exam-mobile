@@ -206,15 +206,30 @@ class Xmsubject extends Common
             $now_time = time();
 
 
-            Log::record('$do_subc_time::'.$do_subc_time);
+            /* Log::record('$do_subc_time::'.$do_subc_time);
             Log::record('$subc_end::'.$subc_end);
             Log::record('$subc_begin::'.$subc_begin);
-            Log::record('$now_time::'.$now_time);
+            Log::record('$now_time::'.$now_time); */
+
+            // 最后一次阅读当前考卷须知的时间
+            $m_notice_read = new \app\common\model\Xmsubjectnoticeread();
+            $notice_whe = [];
+            $notice_whe['subject_class_id'] = $this->subject_cid;
+            $notice_whe['uid'] = $this->uid;
+            $notice_whe['is_read'] = 1;
+            $last_notice_read = $m_notice_read->getOne($notice_whe, 'id desc');
+            $read_time = $last_notice_read['create_at'] ? strtotime($last_notice_read['create_at']) : 0;
+
             if ($subc_end != 0 && $subc_begin != 0) {
                 if ($now_time <= $subc_end) {
                     $do_subc_end = $now_time;
                 } else {
                     $do_subc_end = $subc_end;
+                }
+
+                // 考试须知阅读时间大于考试时间
+                if ($subc_begin <= $read_time) {
+                    $subc_begin = $read_time;
                 }
                 $do_subc_time = $do_subc_end - $subc_begin;
             }

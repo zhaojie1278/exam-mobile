@@ -93,6 +93,19 @@
 
 4.版本号放下面，就是考试系统
 
+20191222
+1. 学号导入
+2、删除多余账号
+3、后台地址账号
+
+20191224
+
+1. 后台显示考试时间不正确 -- fixed
+2. 学生成绩根据班级、科目导出到表格
+3. 统计错题排行
+4. 火狐下，手机号后面会显示这个上下箭头
+
+
 --------
 db:
 xm_member 增加 class_no / login_time
@@ -103,5 +116,21 @@ xm_subject_class.xm_begintime / xm_endtime
 
 xm_subject_class.is_rand
 xm_subject_paper_single.sub_order_i
-xm_subject_class.is_open_score -- TODO 逻辑
+xm_subject_class.is_open_score
 xm_subject_paper.right_count
+xm_subject_login.ip
+xm_subject_class.cate_id default 0 -- TODO
+
+
+// 班级
+xm_member_class
+xm_member.class_id
+
+
+// 会员改为学员
+
+// 电脑端 -- 样式 -- TODO
+
+
+// 后台考试
+

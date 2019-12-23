@@ -118,3 +118,28 @@ function encrypt_sub_phone($tel) {
     $new_tel = preg_replace('/(\d{3})\d{4}(\d{4})/', '$1****$2', $tel);
     return $new_tel;
 }
+
+// 获取ip地址
+function get_ip()
+{
+    if (!empty($_SERVER["HTTP_CLIENT_IP"]) && strcasecmp($_SERVER["HTTP_CLIENT_IP"], "unknown")) {
+        $ip = $_SERVER["HTTP_CLIENT_IP"];
+    } else {
+        if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]) && strcasecmp($_SERVER["HTTP_X_FORWARDED_FOR"], "unknown")) {
+            $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+        } else {
+            if (!empty($_SERVER["REMOTE_ADDR"]) && strcasecmp($_SERVER["REMOTE_ADDR"], "unknown")) {
+                $ip = $_SERVER["REMOTE_ADDR"];
+            } else {
+                if (isset ($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'],
+                        "unknown")
+                ) {
+                    $ip = $_SERVER['REMOTE_ADDR'];
+                } else {
+                    $ip = "unknown";
+                }
+            }
+        }
+    }
+    return ($ip);
+}

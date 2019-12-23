@@ -2,6 +2,7 @@
 namespace app\mobile\controller;
 
 use think\Log;
+use think\Session;
 
 class Xmsubject extends Common
 {
@@ -241,5 +242,11 @@ class Xmsubject extends Common
             $this->assign('is_open_score', 0);
         }
         return $this->fetch();
+    }
+
+    // 清除session，并跳至登录
+    public function tologin() {
+        Session::delete('member');
+        $this->redirect('mobile/login/index');
     }
 }

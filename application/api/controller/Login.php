@@ -42,7 +42,17 @@ class Login extends Controller
 
                 // 登录日志
                 $m_xm_member_login = new \app\common\model\Xmmemberlogin();
-                $rs_login_add = $m_xm_member_login->add(['uid' => $uid, 'login_time' => $nowtime, 'phone' => $phone, 'class_no' => $class_no, 'real_name' => $real_namne, 'subject_cid' => $subject_cid]);
+                $rs_login_add = $m_xm_member_login->add(
+                    [
+                        'uid' => $uid, 
+                        'login_time' => $nowtime, 
+                        'phone' => $phone, 
+                        'class_no' => $class_no, 
+                        'real_name' => $real_namne, 
+                        'subject_cid' => $subject_cid,
+                        'ip' => get_ip()
+                    ]
+                );
 
                 if ($rs === false || !$rs_login_add) {
                     throw new \think\Exception('登录信息保存失败', 100006);
@@ -96,10 +106,5 @@ class Login extends Controller
             return show(config('code.error'), '登录系统异常，请联系管理员或稍后重试', [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
-    }
-
-    
-    // 标注
-    private function generate_subject() {
     }
 }
