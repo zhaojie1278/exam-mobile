@@ -57,3 +57,32 @@ html {
     font-size: 16px;
     color: #000;
 }
+
+.dosub-lbl-checked {
+    background-color: #ddd;
+}
+
+.weui-icon-checkbox-diy:before {
+    display: inline-block;
+    vertical-align: middle;
+    font: normal normal normal 14px/1 weui;
+    font-size: inherit;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    
+    font-size: 23px;
+    display: block;
+    margin-left: .2em;
+    margin-right: .2em;
+}
+
+.weui-icon-checkbox-diy-uncheck:before {
+    content: '\EA01';
+    color: #c9c9c9;
+}
+
+.weui-icon-checkbox-diy-checked:before {
+    content: '\EA06';
+    color: #09bb07;
+}
+

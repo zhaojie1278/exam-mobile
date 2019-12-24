@@ -32,17 +32,20 @@
         <div class="weui-cells weui-cells_checkbox">
             <input type="hidden" id="hidden_sub_id_<{$sbj.id}>" for_radio_name='radio_<{$sbj.id}>' for_radio_sub_id='<{$sbj.id}>' />
             <{volist name='answer_arr' id='answer' key="as_index"}>
-            <label class="weui-cell weui-check__label" for="x<{$sbj.id . '_' . $as_index}>">
+            <label class="weui-cell weui-check__label <{if condition='!empty($sbj.u_answer) && $sbj.u_answer == $answer.a'}>dosub-lbl-checked<{/if}>" for="x<{$sbj.id . '_' . $as_index}>">
                 <div class="weui-cell__bd">
                     <p><{$answer['a']}>、<{$answer['t']}></p>
                 </div>
                 <div class="weui-cell__ft">
                     <{if condition="!empty($sbj.u_answer) && $sbj.u_answer == $answer['a']"}>
                     <input sub_id="<{$sbj.id}>" u_id="<{$member['uid']}>" type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>" value="<{$answer['a']}>" checked="checked">
+                    
+                    <span class="weui-icon-checkbox-diy weui-icon-checkbox-diy-checked"></span>
                     <{else /}>
                     <input sub_id="<{$sbj.id}>" u_id="<{$member['uid']}>" type="radio" class="weui-check" name="radio_<{$sbj.id}>" id="x<{$sbj.id  . '_' . $as_index}>" value="<{$answer['a']}>">
+                    
+                    <span class="weui-icon-checkbox-diy weui-icon-checkbox-diy-uncheck"></span>
                     <{/if}>
-                    <span class="weui-icon-checked"></span>
                 </div>
             </label>
             <{/volist}>
@@ -139,7 +142,9 @@
 
 <!--右侧悬浮 begin-->
 <div class="right-absolute-outer">
-    <span>查看标注 / 做题</span>
+    <span>标注</span>
+    <span>or</span>
+    <span>做题</span>
 </div>
 <div class="right-absolute-inner">
     <a id="to_mark_subjects" href="<{:url('mobile/xmsubject/marksubjects', ['is_right_ab' => 1])}>"><{:config('subject.mark_title')}></a>
