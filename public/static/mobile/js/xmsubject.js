@@ -59,6 +59,8 @@ $(function(){
     // 翻页控制
     $('.pagination a').click(
         function() {
+            if ($(this).hasClass('weui-btn_disabled')) return false;
+
             // leave_page($(this));
             // var checked_radio = $("input[type='radio']:checked", ".weui-form").val();
             // console.log('checked_radio::', checked_radio);
@@ -67,7 +69,7 @@ $(function(){
                 var check = check_done_subject(true);
                 // 后台验证
                 if (check) {
-                    dosubcommit();
+                    dosubcommit($(this));
                 }
             } else {
                 var check = check_done_subject(false);
@@ -204,13 +206,20 @@ function check_done_subject(is_commitsub) {
 }
 
 // 提交试卷
-function dosubcommit() {
+function dosubcommit(subcommit_a) {
+    // 点击控制
+    $(this).removeClass('weui-btn_primary').addClass('weui-btn_disabled weui-btn_default');
+    
     $.ajax({
         type: 'POST',
         url: '/api/xmsubject/dosubcommitbefore',
         data: {},
         success: function (data) {
-            console.log(data)
+
+            // 点击控制
+            subcommit_a.removeClass('weui-btn_disabled weui-btn_default').addClass('weui-btn_primary');
+            
+            // console.log(data)
             if (data.status == 0) {
 
                 // 登录跳转
@@ -254,6 +263,9 @@ function dosubcommit() {
             }
         },
         error: function (data) {
+            // 点击控制
+            subcommit_a.removeClass('weui-btn_disabled weui-btn_default').addClass('weui-btn_primary');
+
             alert('系统异常，请联系管理员或稍后重试');
             return;
         },

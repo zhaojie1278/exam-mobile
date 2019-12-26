@@ -50,9 +50,10 @@ class Xmsubject extends Common
                     's_answer' => $xm_subject['check_answer'],
                     'score' => $xm_subject['score'],
                     'do_time' => time(),
+                    'is_done' => 1,
                     'u_answer' => $answer,
                     'is_right' => $is_right,
-                    'is_doned' => 1
+                    // 'is_doned' => 1
                 );
                 $rs = $m_paper_single->edit($edit_data);
             } else {
@@ -62,10 +63,11 @@ class Xmsubject extends Common
                     'uid' => $this->uid,
                     'score' => $xm_subject['score'],
                     'do_time' => time(),
+                    'is_done' => 1,
                     'u_answer' => $answer,
                     'cid' => $xm_subject['cid'],
                     'is_right' => $is_right,
-                    'is_doned' => 1
+                    // 'is_doned' => 1
                 );
                 $rs = $m_paper_single->add($add_data);
             }
@@ -107,7 +109,7 @@ class Xmsubject extends Common
                     'id' => $m_old_paper['id'],
                     'is_mark' => $is_mark ? 0 : 1,
                     'mark_time' => time(),
-                    'is_marked' => 1
+                    // 'is_marked' => 1
                 );
                 $rs = $m_paper_single->edit($edit_data);
             } else {
@@ -121,7 +123,7 @@ class Xmsubject extends Common
                     's_answer' => $xm_subject['check_answer'],
                     'score' => $xm_subject['score'],
                     'is_right' => $is_right,
-                    'is_marked' => 1
+                    // 'is_marked' => 1
                 );
                 $rs = $m_paper_single->add($add_data);
             }

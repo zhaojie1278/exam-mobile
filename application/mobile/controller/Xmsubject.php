@@ -1,6 +1,7 @@
 <?php
 namespace app\mobile\controller;
 
+use think\Db;
 use think\Log;
 use think\Session;
 
@@ -82,7 +83,7 @@ class Xmsubject extends Common
         
         try {
             $where['s.is_deleted'] = ['EQ', config('code.status_normal')];
-            $where['s.cid'] = $this->subject_cid; // TODO 配置
+            $where['s.cid'] = $this->subject_cid;
             $m_subject = new \app\common\model\Xmsubject();
             $subjects = $m_subject->getAllByPage($where, $this->uid);
             $this->assign(['list' => $subjects]);
@@ -104,16 +105,21 @@ class Xmsubject extends Common
         
         try {
             $where['s.is_deleted'] = ['EQ', config('code.status_normal')];
-            $where['s.cid'] = $this->subject_cid; // TODO 配置
+            $where['s.cid'] = $this->subject_cid;
 
-            $is_right_ab = input('get.is_right_ab') + 0;
-            if (!$is_right_ab) {
+            $is_page = input('get.page/d', 0);
+            if ($is_page >= 1) {
                 // 分页进入
                 $where['ps.is_marked'] = 1; // 标注过的，用于分页时，不丢失题目
             } else {
-                // 外部链接进入
-                $where['ps.is_mark'] = 1;
-                $where['ps.is_marked'] = 1; // 标注过的，用于分页时，不丢失题目
+                // 非分页链接进入
+                $where['ps.is_mark'] = 1; // 标注的
+                
+                // is_marked 数据校正，将已标注的题目的 is_marked 改为 1
+                $rs_all_up = $this->do_is_marked($this->uid, $this->subject_cid);
+                if ($rs_all_up === false) {
+                    $this->error('查询失败', 'mobile/xmsubject/index');
+                }
             }
             $m_subject = new \app\common\model\Xmsubject();
             $page_config = [
@@ -129,10 +135,9 @@ class Xmsubject extends Common
         }
 
         // 分页无数据跳至默认页
-        $is_page = input('get.page/d', 0);
         if (count($subjects) == 0 && $is_page > 0) {
             // unset($subjects);
-            $this->redirect('mobile/xmsubject/donesubjects', ['is_right_ab' => 1]);
+            $this->redirect('mobile/xmsubject/donesubjects');
         }
 
         // 标题备注
@@ -150,10 +155,26 @@ class Xmsubject extends Common
         
         try {
             $where['s.is_deleted'] = ['EQ', config('code.status_normal')];
-            $where['s.cid'] = $this->subject_cid; // TODO 配置
+            $where['s.cid'] = $this->subject_cid;
             // $where_query = '(ps.is_doned=0 or ps.is_doned is null) and (ps.is_marked=0 or ps.is_marked is null)'; // 未做的试题
-            $where_query = 'ps.is_doned=0 or ps.is_doned is null'; // 未做的试题
 
+            // is_doned 数据校正，将已做的题目的 is_doned 改为 1
+            // $where_query = 'ps.is_doned=0 or ps.is_doned is null'; // 未做的试题
+
+            $is_page = input('get.page/d', 0);
+            if ($is_page >= 1) {
+                // 分页进入
+                $where['ps.is_doned'] = 0; // 已做的，用于分页时，不丢失题目
+            } else {
+                // 非分页链接进入
+                $where['ps.is_done'] = 0; // 已做的，用于分页时，不丢失题目
+                // is_doned 数据校正，将已做的题目的 is_doned 改为 1
+                $rs_all_up = $this->do_is_doned($this->uid, $this->subject_cid);
+                
+                if ($rs_all_up === false) {
+                    $this->error('查询失败，请联系管理员', 'mobile/xmsubject/index');
+                }
+            }
             $m_subject = new \app\common\model\Xmsubject();
             $page_config = [
                 'var_page' => 'page',
@@ -161,18 +182,18 @@ class Xmsubject extends Common
             ];
 
             $m_subject = new \app\common\model\Xmsubject();
-            $subjects = $m_subject->getAllByPage($where, $this->uid, $page_config, $where_query);
+            $subjects = $m_subject->getAllByPage($where, $this->uid, $page_config);
             $this->assign(['list' => $subjects]);
             $this->assign('member', array('uid' => $this->uid));
         } catch (\Exception $e) {
-            Log::error('subject----->'.$e->getCode().':'.$e->getMessage());
+            Log::error('subject----->'.$e->getCode().':'.$e->getMessage().':'.$e->getLine());
             $this->error('查询失败，请联系管理员', 'Error/error404');
         }
 
         $is_page = input('get.page/d', 0);
         if (count($subjects) == 0 && $is_page > 0) {
             // unset($subjects);
-            $this->redirect('mobile/xmsubject/undosubjects', ['is_right_ab' => 1]);
+            $this->redirect('mobile/xmsubject/undosubjects');
         }
 
         // 标题备注
@@ -190,8 +211,8 @@ class Xmsubject extends Common
         
         try {
             $where['s.is_deleted'] = ['EQ', config('code.status_normal')];
-            $where['s.cid'] = $this->subject_cid; // TODO 配置
-            $where['ps.is_doned'] = 1;
+            $where['s.cid'] = $this->subject_cid;
+            $where['ps.is_done'] = 1;
             $m_subject = new \app\common\model\Xmsubject();
             $page_config = [
                 'var_page' => 'page',
@@ -209,7 +230,7 @@ class Xmsubject extends Common
         $is_page = input('get.page/d', 0);
         if (count($subjects) == 0 && $is_page > 0) {
             // unset($subjects);
-            $this->redirect('mobile/xmsubject/donesubjects', ['is_right_ab' => 1]);
+            $this->redirect('mobile/xmsubject/donesubjects');
         }
 
         // 标题备注
@@ -249,4 +270,17 @@ class Xmsubject extends Common
         Session::delete('member');
         $this->redirect('mobile/login/index');
     }
+
+    // 标注数据全局更新
+    private function do_is_marked($uid, $cid) {
+        $rs_up = Db::execute("update xm_subject_paper_single set is_marked=is_mark where uid=:uid and cid=:cid",['uid'=>$uid,'cid'=>$cid]);
+        return $rs_up;
+    }
+
+    // 已做试题数据全局更新
+    private function do_is_doned($uid, $cid) {
+        $rs_up = Db::execute("update xm_subject_paper_single set is_doned=is_done where uid=:uid and cid=:cid",['uid'=>$uid,'cid'=>$cid]);
+        return $rs_up;
+    }
+
 }

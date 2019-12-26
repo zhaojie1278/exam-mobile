@@ -18,11 +18,11 @@ class Pageundo extends Paginator
     //上一页
     protected function prev() {
         
-        /* if ($this->currentPage() > 1) {
-            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage) . "' title='上一页'>上一页</a>";
+        if ($this->currentPage() > 1) {
+            return "<a class='weui-btn weui-btn_primary' href='" . $this->url($this->currentPage - 1) . "' title='上一页'>上一页</a>";
         } else {
             return "";
-        } */
+        }
        
 
         return '';
