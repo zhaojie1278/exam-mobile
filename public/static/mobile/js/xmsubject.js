@@ -32,7 +32,7 @@ $(function(){
                 if(app_last_time-app_last_time_old < app_move_dis){
                     // console.log('app_last_time_old - app_last_time < app_move_dis')
 
-                    $.alert('答题过快，请认真作答，点击确定后请确认界面已选答案是否你要选定的答案');
+                    $.alert('答题过快，请认真作答，“点击确定后请查看界面上有灰底的选项是否你要选的选项”，<font color="red">如果不一致，请重新选择后继续答题</font>');
                     return;
                 } else {
                     // app_last_time_old = 0;
@@ -41,7 +41,7 @@ $(function(){
                     // console.log('app_dosub_server_rs::',app_dosub_server_rs);
                     // 服务器返回后才可继续做题
                     if (app_dosub_server_rs != 1) {
-                        $.alert('网络请求过慢，点击确定后请确认界面已选答案是否你要选定的答案');
+                        $.alert('网络请求过慢，“点击确定后请查看界面上有灰底的选项是否你要选的选项”，<font color="red">如果不一致，请重新选择后继续答题</font>');
                         return;
                     } else {
                         app_dosub_server_rs = 0;
