@@ -8,6 +8,8 @@
 
 namespace app\common\model;
 
+use think\Log;
+
 class Xmsubpapersingle extends Base
 {
     protected $table = 'xm_subject_paper_single';
@@ -66,40 +68,60 @@ class Xmsubpapersingle extends Base
         $add_data = array();
 
         $add_subs = array();
-        if ($sub_all) {
+
+        // 使用题干id随机，保证有题干的题目还是在一起展示
+        $sub_stem_ids = [];
+        $sub_stem_all_kv = [];
+        foreach($sub_all as $sub) {
+            if (in_array($sub['sub_stem_id'], $sub_stem_ids)) {
+                $sub_stem_all_kv[$sub['sub_stem_id']][] = $sub;
+            } else {
+                $sub_stem_all_kv[$sub['sub_stem_id']][] = $sub;
+                $sub_stem_ids[] = $sub['sub_stem_id'];
+            }
+        }
+        if ($sub_stem_ids) {
             if ($is_rand) {
                 // 打乱试题
-                shuffle( $sub_all );
+                shuffle( $sub_stem_ids );
             }
         }
 
         $sub_order_i = 1;
-        foreach($sub_all as $sub) {
-            $sub_id = $sub['id'];
-            $old_pap_whe = ['sub_id' => $sub_id, 'uid' => $uid, 'cid' => $subject_class_cid];
-            $m_old_paper_s = $this->getOne($old_pap_whe);
-            $sub_check_answer = $sub['check_answer'];
-            $sub_score = $sub['score'];
-            $sub_cid = $sub['cid'];
-            if (empty($m_old_paper_s)) {
-                $add_data[] = array(
-                    'sub_order_i' => $sub_order_i,
-                    'sub_id' => $sub['id'],
-                    's_answer' => $sub_check_answer,
-                    'uid' => $uid,
-                    'score' => $sub_score,
-                    'cid' => $sub_cid,
-                );
-                $sub_order_i++;
-            } else {
-               /* $edit_data = array(
-                    'id' => $m_old_paper_s['id'],
-                    's_answer' => $sub_check_answer,
-                    'uid' => $uid,
-                    'score' => $$sub_score,
-                    'cid' => $sub_cid,
-                );
-                $rs = $this->edit($edit_data); */
+        Log::record('$sub_stem_ids::'.var_export(count($sub_stem_ids), true));
+        Log::record('$sub_stem_ids::'.var_export($sub_stem_ids, true));
+        foreach($sub_stem_ids as $sub_stem_id) {
+            $subs = $sub_stem_all_kv[$sub_stem_id];
+
+            // 一个题干的多个题目，如果没有多个，至少有一个
+            foreach ($subs as $sub) {
+                $sub_id = $sub['id'];
+                $old_pap_whe = ['sub_id' => $sub_id, 'uid' => $uid, 'cid' => $subject_class_cid];
+                $m_old_paper_s = $this->getOne($old_pap_whe);
+                $sub_check_answer = $sub['check_answer'];
+                $sub_score = $sub['score'];
+                $sub_cid = $sub['cid'];
+                if (empty($m_old_paper_s)) {
+                    $add_data[] = array(
+                        'sub_order_i' => $sub_order_i,
+                        'sub_id' => $sub['id'],
+                        's_answer' => $sub_check_answer,
+                        'uid' => $uid,
+                        'score' => $sub_score,
+                        'cid' => $sub_cid,
+                        'sub_stem_id' => $sub['sub_stem_id'],
+                    );
+                    $sub_order_i++;
+                } else {
+                    /* $edit_data = array(
+                         'id' => $m_old_paper_s['id'],
+                         's_answer' => $sub_check_answer,
+                         'uid' => $uid,
+                         'score' => $$sub_score,
+                         'cid' => $sub_cid,
+                     );
+                     $rs = $this->edit($edit_data); */
+                }
             }
         }
 

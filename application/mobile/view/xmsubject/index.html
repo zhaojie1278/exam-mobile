@@ -11,22 +11,28 @@
     <{volist name='list' id='sbj' key="sbj_index"}>
     <div class="weui-cells__group weui-cells__group_form" id="form_group_<{$sbj.id}>">
         <div class="weui-cells__title sub-tit">
-            <span class="must-star">*</span>
-            <!-- <{empty name=":input('page')"}>
-            <{assign name='cur_page' value="0"}>
+            <{notempty name="sbj.sub_stem"}>
+            <div class="sub_stem"><{$sbj.sub_stem}></div>
             <{else /}>
-            <{assign name='cur_page' value=":input('page') - 1" }>
-            <{/empty}> -->
-            <!-- <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span> -->
-            <span><{$sbj.sub_order_i}>、<{$sbj.question}>？</span>
-            <{eq name='sbj.is_mark' value='1'}>
-            <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>" style="color: #666666;">取消标注</span>
-            <{else /}>
-            <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="0">标注一下</span>
-            <{/eq}>
-            <{notempty name='sbj.answer'}>
-            <{assign name='answer_arr' value=':json_decode($sbj.answer, true)'}>
             <{/notempty}>
+            <div>
+                <span class="must-star">*</span>
+                <!-- <{empty name=":input('page')"}>
+                <{assign name='cur_page' value="0"}>
+                <{else /}>
+                <{assign name='cur_page' value=":input('page') - 1" }>
+                <{/empty}> -->
+                <!-- <span><{$cur_page * config('paginate.list_rows') + $sbj_index}>、<{$sbj.question}>？</span> -->
+                <span><{$sbj.sub_order_i}>、<{$sbj.question}>？</span>
+                <{eq name='sbj.is_mark' value='1'}>
+                <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="<{$sbj.is_mark}>" style="color: #666666;">取消标注</span>
+                <{else /}>
+                <span id="mark_sub_id_<{$sbj.id}>" class="mark weui-btn weui-btn_mini weui-btn_plain-primary" for_mark_sub_id="<{$sbj.id}>" for_mark_stu="0">标注一下</span>
+                <{/eq}>
+                <{notempty name='sbj.answer'}>
+                <{assign name='answer_arr' value=':json_decode($sbj.answer, true)'}>
+                <{/notempty}>
+            </div>
         </div>
         <{notempty name='answer_arr'}>
         <div class="weui-cells weui-cells_checkbox">

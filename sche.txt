@@ -131,7 +131,12 @@
 4、考试结果页面的分数不正确？
 5、统计数据只要错题的，标注的等等可以不要，作为单独一页
 
-
+20191229
+1、增加题干
+2、题干作为一个题目属性，进行打乱操作
+3、导入、导出
+4、学生答题界面修改
+    题干显示在上面
 
 --------
 db:
@@ -167,3 +172,7 @@ xm_subject_paper_single add index uid_cid
 xm_subject_paper_single add column is_done
 
 xm_subject_statis
+
+
+xm_subject.sub_stem_id / xm_subject.sub_stem
+xm_subject_paper_single.sub_stem_id

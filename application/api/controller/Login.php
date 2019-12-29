@@ -80,7 +80,7 @@ class Login extends Controller
                     // 生成带排序的试卷
                     $m_sub = new \app\common\model\Xmsubject();
                     $sub_where = ['cid' => $subject_class['id'], 'is_deleted' => config('code.status_normal')];
-                    $fields = 'id,check_answer,score,cid';
+                    $fields = 'id,check_answer,score,cid,sub_stem_id,sub_stem_id,sub_stem';
                     $sub_all = $m_sub->getAll($sub_where, $fields);
                     $m_sub_pap_single = new \app\common\model\Xmsubpapersingle();
                     $rs_generate = $m_sub_pap_single->generateMemberSPSingle($sub_all, $uid, $subject_class['id'], $subject_class['is_rand']);
