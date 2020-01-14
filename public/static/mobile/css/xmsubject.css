@@ -58,6 +58,10 @@ html {
     color: #000;
 }
 
+.subject_export {
+    margin: 10px auto 0;
+}
+
 .dosub-lbl-checked {
     background-color: #ddd;
 }

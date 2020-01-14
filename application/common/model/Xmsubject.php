@@ -55,4 +55,17 @@ class Xmsubject extends Base
             ->find();
         return $subject;
     }
+
+    // 根据选项从选项集中获取选项详情
+    public function getSubOption($answers, $option) {
+        $answers = json_decode($answers, true);
+        $answer_txt = '';
+        foreach($answers as $k => $v) {
+            if ($option == $v['a']) {
+                $answer_txt = $v['t'];
+                break;
+            }
+        }
+        return $answer_txt;
+    }
 }

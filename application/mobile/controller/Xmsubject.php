@@ -4,6 +4,12 @@ namespace app\mobile\controller;
 use think\Db;
 use think\Log;
 use think\Session;
+use think\Loader;
+use PHPExcel;
+use PHPExcel_IOFactory;
+use PHPExcel_Cell;
+use PHPExcel_Writer_Excel5;
+use PHPExcel_Writer_Excel2007;
 
 class Xmsubject extends Common
 {
@@ -239,7 +245,7 @@ class Xmsubject extends Common
         return $this->fetch('index');
     }
 
-    // 提交试卷
+    // 考试结果
     public function commitafter() {
         // 试卷题目是否做完
         
@@ -263,6 +269,115 @@ class Xmsubject extends Common
             $this->assign('is_open_score', 0);
         }
         return $this->fetch();
+    }
+    
+    // 考试结果导出
+    public function xmsubjectexport() {
+        // 查看错题
+        $m_xm_member = new \app\common\model\Xmmember();
+        $xm_sub_whe = [
+            'id' => $this->uid,
+        ];
+        $stu_info = $m_xm_member->getOne($xm_sub_whe);
+        $m_paper = new \app\common\model\Xmsubpapersingle();
+        $m_paper_s_whe['p.cid'] = $this->subject_cid;
+        $m_paper_s_whe['p.uid'] = $this->uid;
+        $m_paper_s_whe['p.is_right'] = 0; // 答题错误
+        $m_paper_s_whe['p.u_answer'] = ['NEQ', ''];
+        $xm_paper_singles = $m_paper->getAllDoSubs($m_paper_s_whe);
+        if (empty($xm_paper_singles) || count($xm_paper_singles) == 0) {
+            $this->error('抱歉，当前无考试记录');
+        }
+
+        // 试题模型
+        $m_xm_sub = new \app\common\model\Xmsubject();
+
+        //2.实例化PHPExcel类
+        Loader::import('PHPExcel.PHPExcel');
+        Loader::import('PHPExcel.PHPExcel.PHPExcel_IOFactory');
+        Loader::import('PHPExcel.PHPExcel.PHPExcel_Cell');
+        // $objPHPExcel = vendor('PHPExcel');
+        // $objPHPExcel = vendor('PHPExcel_IOFactory');
+        
+        $objPHPExcel = new \PHPExcel();
+
+        // 考试统计信息 -- sheet 1 -- begin
+
+        //3.激活当前的sheet表
+        $sheet1 = 0;
+        $objPHPExcel->setActiveSheetIndex($sheet1);
+        //4.设置表格头（即excel表格的第一行）
+        $objPHPExcel->setActiveSheetIndex($sheet1)
+                ->setCellValue('A1', '题干')
+                ->setCellValue('B1', '题目')
+                ->setCellValue('C1', '正确选项')
+                ->setCellValue('D1', '错误选项');
+
+        // 设置换行
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('A')->getAlignment()->setWrapText(TRUE);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('B')->getAlignment()->setWrapText(TRUE);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('C')->getAlignment()->setWrapText(TRUE);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()->setWrapText(TRUE);
+
+        //设置水平居中、垂直居中
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('A')->getAlignment()
+        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+$objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('A')->getAlignment()
+        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('B')->getAlignment()
+        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+$objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('B')->getAlignment()
+        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('C')->getAlignment()
+        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+$objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('C')->getAlignment()
+        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
+        ->setHorizontal(\PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
+$objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
+        ->setVertical(\PHPExcel_Style_Alignment::VERTICAL_TOP);
+
+        //设置单元格宽度
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getColumnDimension('A')->setWidth(60);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getColumnDimension('B')->setWidth(60);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getColumnDimension('C')->setWidth(35);
+        $objPHPExcel->setActiveSheetIndex($sheet1)->getColumnDimension('D')->setWidth(35);
+
+
+        //5.循环刚取出来的数组，将数据逐一添加到excel表格。
+        for($i=0;$i<count($xm_paper_singles);$i++){
+            $objPHPExcel->getActiveSheet()->setCellValue('A'.($i+2),$xm_paper_singles[$i]['sub_stem']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($i+2),$xm_paper_singles[$i]['sub_id'].'.'.$xm_paper_singles[$i]['question']);
+
+            // 正确选项
+            $s_answer_txt = $m_xm_sub->getSubOption($xm_paper_singles[$i]['answer'], $xm_paper_singles[$i]['s_answer']);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.($i+2),  $xm_paper_singles[$i]['s_answer'].'.'.$s_answer_txt);
+
+            // 错误选项
+            $u_answer_txt = $m_xm_sub->getSubOption($xm_paper_singles[$i]['answer'], $xm_paper_singles[$i]['u_answer']);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.($i+2), $xm_paper_singles[$i]['u_answer'].'.'.$u_answer_txt);
+        }
+
+        //7.设置当前激活的sheet表格名称；
+        $objPHPExcel->getActiveSheet()->setTitle('个人考试记录');
+        // -- sheet 1 -- end
+
+
+        $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];
+        //6.设置保存的Excel表格名称
+        $filename = ''.$subject_class_name.'-'.date('Ymd',time()).'.xls';
+
+        //8.设置浏览器窗口下载表格
+        header("Content-Type: application/force-download");
+        header("Content-Type: application/octet-stream");
+        header("Content-Type: application/download");
+        header('Content-Disposition:inline;filename="'.$filename.'"');
+
+        //生成excel文件
+        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        //下载文件在浏览器窗口
+        $objWriter->save('php://output');
+        exit;
     }
 
     // 清除session，并跳至登录

@@ -132,4 +132,20 @@ class Xmsubpapersingle extends Base
         }
         return $rs;
     }
+
+    /**
+     * 获取已做试题
+     */
+    public function getAllDoSubs($condition = [])
+    {
+        $order = ['p.sub_id' => 'ASC'];
+        $subjects = $this
+        ->alias('p')
+        ->join('xm_subject s', 'p.sub_id=s.id')
+        ->field('p.*,s.answer,s.sub_stem,s.question,s.check_answer')
+        ->where($condition)
+        ->order($order)
+        ->select();
+        return $subjects;
+    }
 }

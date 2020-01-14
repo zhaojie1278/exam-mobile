@@ -55,7 +55,7 @@ class Common extends Controller
             $cur_controller = $request->controller();
             $cur_action = $request->action();
             
-            if (!(strtolower($cur_controller) == 'xmsubject' && strtolower($cur_action) == 'commitafter')) {
+            if (!(strtolower($cur_controller) == 'xmsubject' && (strtolower($cur_action) == 'commitafter' || strtolower($cur_action) == 'xmsubjectexport'))) {
                 if ($nowtime >= $subc_end) {
                     Session::delete('member');
                     $this->success('考试已结束', 'mobile/login/index');
