@@ -359,13 +359,13 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
         }
 
         //7.设置当前激活的sheet表格名称；
-        $objPHPExcel->getActiveSheet()->setTitle('个人考试记录');
+        $objPHPExcel->getActiveSheet()->setTitle('个人考试错题记录');
         // -- sheet 1 -- end
 
 
         $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];
         //6.设置保存的Excel表格名称
-        $filename = ''.$subject_class_name.'-'.date('Ymd',time()).'.xls';
+        $filename = ''.$subject_class_name.'-错题-'.date('Ymd',time()).'.xls';
 
         //8.设置浏览器窗口下载表格
         header("Content-Type: application/force-download");
