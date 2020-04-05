@@ -6,3 +6,4 @@ public/uploads
 *.zip
 *.rar
 muke-demo
+*.tags*
