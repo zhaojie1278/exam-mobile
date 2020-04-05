@@ -142,7 +142,7 @@ class Xmsubpapersingle extends Base
         $subjects = $this
         ->alias('p')
         ->join('xm_subject s', 'p.sub_id=s.id')
-        ->field('p.*,s.answer,s.sub_stem,s.question,s.check_answer')
+        ->field('p.*,s.answer,s.sub_stem,s.question,s.check_answer,s.sub_order_no')
         ->where($condition)
         ->order($order)
         ->select();

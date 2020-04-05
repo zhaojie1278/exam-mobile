@@ -345,9 +345,10 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
 
 
         //5.循环刚取出来的数组，将数据逐一添加到excel表格。
-        for($i=0;$i<count($xm_paper_singles);$i++){
+        $xm_paper_count = count($xm_paper_singles);
+        for($i=0;$i<$xm_paper_count;$i++){
             $objPHPExcel->getActiveSheet()->setCellValue('A'.($i+2),$xm_paper_singles[$i]['sub_stem']);
-            $objPHPExcel->getActiveSheet()->setCellValue('B'.($i+2),$xm_paper_singles[$i]['sub_id'].'.'.$xm_paper_singles[$i]['question']);
+            $objPHPExcel->getActiveSheet()->setCellValue('B'.($i+2),$xm_paper_singles[$i]['sub_order_no'].'.'.$xm_paper_singles[$i]['question']);
 
             // 正确选项
             $s_answer_txt = $m_xm_sub->getSubOption($xm_paper_singles[$i]['answer'], $xm_paper_singles[$i]['s_answer']);
