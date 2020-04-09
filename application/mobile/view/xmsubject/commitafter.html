@@ -1,6 +1,6 @@
 <{layout name="layout/layout" /}>
 <{load href="/static/mobile/css/xmsubject.css" /}> 
-<{load href="/static/mobile/js/xmsubject.js" /}> 
+<script type="text/javascript" src="/static/mobile/js/xmsubject.js?v=1.0"></script>
 <div class="weui-msg">
     <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
     <div class="weui-msg__text-area">
@@ -11,11 +11,12 @@
       <p class="weui-msg__desc subject_result">本次考试<{$sub_paper['score'] + 0}>分</p>
       <p class="weui-msg__desc">正确率<{$right_percent}>%，共<{$sub_count}>题，已做<{$do_count}>题</p>
       <{/empty}>
+      <p class="weui-msg__desc subject_export"><a href="javascript:void(0);" id="send_mail" class="weui-btn weui-btn_mini weui-btn_plain-primary" to_mail="">错题记录发送邮箱</a></p>
       <p class="weui-msg__desc subject_export"><a href="<{:url('mobile/xmsubject/xmsubjectexport')}>" class="weui-btn weui-btn_mini weui-btn_plain-primary">导出错题记录</a></p>
       <p class="erweima">
-        <img src="__STATIC__/mobile/images/weixin-public.jpg" />
+        <img src="__STATIC__/mobile/images/wafer-1.jpg" />
       </p>
-      <p class="erweima-tip weui-msg__desc">请关注二维码，获取更多信息</p>
+      <p class="erweima-tip weui-msg__desc">更多免费习题请关注并使用”护考家题库”小程序，为您护考加油助力。</p>
     </div>
     <div class="weui-msg__opr-area">
       <p class="weui-btn-area">

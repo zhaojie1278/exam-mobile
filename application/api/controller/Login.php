@@ -32,7 +32,7 @@ class Login extends Controller
 
                 // 验证手机号
                 if (!empty($member_info['phone']) && $member_info['phone'] != $phone) {
-                    return show(config('code.error'), '登录失败，请输入上次登录时使用的手机号'.encrypt_sub_phone($member_info['phone']).'登录', [], 200);
+                    return show(config('code.error'), '登录失败，请输入正确的手机号'.encrypt_sub_phone($member_info['phone']).'登录', [], 200);
                 }
                 // dump(Session::get('member'));
 

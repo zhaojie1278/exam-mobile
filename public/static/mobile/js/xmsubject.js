@@ -91,6 +91,54 @@ $(function(){
         }
         domark(sub_id);
     });
+
+    // 发送错题记录至邮箱
+    $("#send_mail").click(function() {
+        if ($(this).hasClass('send_disabled')) return;
+        if ($(this).hasClass('send_sended')) {
+            $.alert('邮件已发送，请去邮箱 '+$("#send_mail").attr('to_mail')+' 查收');
+            return;
+        }
+
+        $.showLoading('发送中...');
+
+        $("#send_mail").addClass('send_disabled');
+        $.ajax({
+        type: 'POST',
+        url: '/api/xmsubject/exporttomail',
+        data: {},
+        success: function (data) {
+            $.hideLoading();
+            // 登录跳转
+            if (undefined != data.data.rs_login_url && data.data.rs_login_url != '') {
+                tologin(data.data.rs_login_url, data.message);
+                return;
+            }
+            // --
+
+            $("#send_mail").removeClass('send_disabled');
+            if (data.status == 0) {
+                if (undefined != data.message && data.message) {
+                    $.alert(data.message);
+                } else {
+                    $.alert('发送失败，请联系管理员或稍后重试');
+                }
+            } else {
+                $("#send_mail").addClass('send_sended');
+                var mail = data.data.mail;
+                $("#send_mail").attr('to_mail', mail);
+                $.alert('邮件已发送，请去邮箱 ' + mail + ' 查收');
+            }
+        },
+        error: function (data) {
+            $.hideLoading();
+            $("#send_mail").removeClass('send_disabled');
+            $.alert('系统异常，请联系管理员或稍后重试');
+            return;
+        },
+        dataType: 'json'
+    });
+    })
 });
 
 // 做题

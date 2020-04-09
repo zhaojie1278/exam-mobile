@@ -271,24 +271,8 @@ class Xmsubject extends Common
         return $this->fetch();
     }
     
-    // 考试结果导出
-    public function xmsubjectexport() {
-        // 查看错题
-        $m_xm_member = new \app\common\model\Xmmember();
-        $xm_sub_whe = [
-            'id' => $this->uid,
-        ];
-        $stu_info = $m_xm_member->getOne($xm_sub_whe);
-        $m_paper = new \app\common\model\Xmsubpapersingle();
-        $m_paper_s_whe['p.cid'] = $this->subject_cid;
-        $m_paper_s_whe['p.uid'] = $this->uid;
-        $m_paper_s_whe['p.is_right'] = 0; // 答题错误
-        $m_paper_s_whe['p.u_answer'] = ['NEQ', ''];
-        $xm_paper_singles = $m_paper->getAllDoSubs($m_paper_s_whe);
-        if (empty($xm_paper_singles) || count($xm_paper_singles) == 0) {
-            $this->error('抱歉，当前无考试记录');
-        }
-
+    // 生成考试结果表格
+    public function phpexcelGenerate($stu_info, $xm_paper_singles) {
         // 试题模型
         $m_xm_sub = new \app\common\model\Xmsubject();
 
@@ -364,9 +348,32 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
         // -- sheet 1 -- end
 
 
+        return $objPHPExcel;
+    }
+
+    // 考试结果导出
+    public function xmsubjectexport() {
+        // 查看错题
+        $m_xm_member = new \app\common\model\Xmmember();
+        $xm_sub_whe = [
+            'id' => $this->uid,
+        ];
+        $stu_info = $m_xm_member->getOne($xm_sub_whe);
+        $m_paper = new \app\common\model\Xmsubpapersingle();
+        $m_paper_s_whe['p.cid'] = $this->subject_cid;
+        $m_paper_s_whe['p.uid'] = $this->uid;
+        $m_paper_s_whe['p.is_right'] = 0; // 答题错误
+        $m_paper_s_whe['p.u_answer'] = ['NEQ', ''];
+        $xm_paper_singles = $m_paper->getAllDoSubs($m_paper_s_whe);
+        if (empty($xm_paper_singles) || count($xm_paper_singles) == 0) {
+            $this->error('抱歉，当前无考试记录');
+        }
+
+        $objPHPExcel = $this->phpexcelGenerate($stu_info, $xm_paper_singles);
+
         $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];
         //6.设置保存的Excel表格名称
-        $filename = ''.$subject_class_name.'-错题-'.date('Ymd',time()).'.xls';
+        $filename = $subject_class_name.'-错题-'.date('Ymd',time()).'.xls';
 
         //8.设置浏览器窗口下载表格
         header("Content-Type: application/force-download");
@@ -398,5 +405,4 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
         $rs_up = Db::execute("update xm_subject_paper_single set is_doned=is_done where uid=:uid and cid=:cid",['uid'=>$uid,'cid'=>$cid]);
         return $rs_up;
     }
-
 }
