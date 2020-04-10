@@ -399,6 +399,7 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
                 return show(config('code.error'), '邮件发送失败，请联系管理员或稍后重试', [], 200);
             }
             Log::error("send-mail-rs::".var_export($rs, true));
+            // sleep(5);
             if (file_exists($file_path)) {
                 $rs_unlink = @unlink($file_path);
                 Log::error('file delete rs:'.var_export($rs_unlink, true));
