@@ -61,7 +61,7 @@ function timedown(id, totalSeconds) {
           });
         var timer_id2 = setTimeout(function () {
             clearTimeout(timer_id2);
-            dosubcommit_redirect();
+            dosubcommit_redirect(1);
         }, 3000);
         return;
 

@@ -219,10 +219,16 @@ class Xmsubject extends Common
             $now_time = time();
 
 
-            /* Log::record('$do_subc_time::'.$do_subc_time);
+            Log::record('$do_subc_time::'.$do_subc_time);
             Log::record('$subc_end::'.$subc_end);
             Log::record('$subc_begin::'.$subc_begin);
-            Log::record('$now_time::'.$now_time); */
+            Log::record('$now_time::'.$now_time); 
+
+            if (input('post.auto/d')) {
+                Log::record('----------is auto commit:'.var_export(input('post.auto/d'), true));
+            } else {
+                Log::record('----------is not auto commit:'.var_export(input('post.auto/d'), true));
+            }
 
             // 最后一次阅读当前考卷须知的时间
             $m_notice_read = new \app\common\model\Xmsubjectnoticeread();

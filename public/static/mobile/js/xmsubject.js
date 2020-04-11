@@ -322,11 +322,11 @@ function dosubcommit(subcommit_a) {
 }
 
 // 提交试卷-直接
-function dosubcommit_redirect() {
+function dosubcommit_redirect(is_auto = 0) {
     $.ajax({
         type: 'POST',
         url: '/api/xmsubject/dosubcommit',
-        data: {},
+        data: {auto: is_auto},
         success: function (data) {
 
             // 登录跳转

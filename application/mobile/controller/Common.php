@@ -4,6 +4,7 @@ namespace app\mobile\controller;
 use think\Controller;
 use think\Request;
 use think\Session;
+use think\Log;
 
 class Common extends Controller
 {
@@ -64,6 +65,9 @@ class Common extends Controller
 
             $reminder_time = $subc_end - $nowtime;
             $reminder_time_str = time_remainder($reminder_time);
+            Log::record('--------uid::'.var_export($this->uid, true));
+            Log::record('--------reminder_time::'.var_export($reminder_time, true));
+            Log::record('--------reminder_time_str::'.var_export($reminder_time_str, true));
             $this->assign('reminder_time', $reminder_time);
             $this->assign('reminder_time_str', $reminder_time_str);
             $this->assign('page_title', $_sub_class['name']);
