@@ -133,7 +133,7 @@ $(function(){
         error: function (data) {
             $.hideLoading();
             $("#send_mail").removeClass('send_disabled');
-            $.alert('系统异常，请联系管理员或稍后重试');
+            $.alert('系统异常，请联系管理员或稍后重试D004');
             return;
         },
         dataType: 'json'
@@ -208,7 +208,7 @@ function do_sub(checked_radio) {
         error: function (data) {
             // 上一题做完有正确返回才可做下一题，避免网络慢的情况
             app_dosub_server_rs = 1;
-            alert('系统异常，请联系管理员或稍后重试');
+            alert('系统异常，请联系管理员或稍后重试D001');
             return;
         },
         dataType: 'json'
@@ -314,7 +314,7 @@ function dosubcommit(subcommit_a) {
             // 点击控制
             subcommit_a.removeClass('weui-btn_disabled weui-btn_default').addClass('weui-btn_primary');
 
-            alert('系统异常，请联系管理员或稍后重试');
+            alert('系统异常，请联系管理员或稍后重试D002');
             return;
         },
         dataType: 'json'
@@ -356,7 +356,7 @@ function dosubcommit_redirect(is_auto = 0) {
             }
         },
         error: function (data) {
-            alert('系统异常，请联系管理员或稍后重试');
+            alert('系统异常，请联系管理员或稍后重试D003');
             return;
         },
         dataType: 'json'

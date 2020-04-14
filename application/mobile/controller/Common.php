@@ -21,6 +21,7 @@ class Common extends Controller
     public function _initialize()
     {
         parent::_initialize();
+        Log::record('--------_initialize time::'.time());
         $this->mobile_index_url = '/mobile';
         if (Session::get('member.uid')) {
             $this->uid = Session::get('member.uid');
@@ -29,6 +30,8 @@ class Common extends Controller
             // 未登录
             $this->redirect('mobile/login/index');
         }
+        Log::record('--------_initialize::'.var_export($this->uid, true));
+        
         $this->assign('mobile_index_url', $this->mobile_index_url);
 
         // 考试时间管理（根据试卷）

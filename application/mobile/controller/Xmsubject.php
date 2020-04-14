@@ -77,7 +77,6 @@ class Xmsubject extends Common
     {
         // 查看是否已交卷
         $this->isSubDone();
-
         $read_notice_id = input('get.read_notice_id/d', 0);
 
         if (!$read_notice_id) {

@@ -3,6 +3,7 @@ namespace app\api\controller;
 
 use think\Controller;
 use think\Session;
+use think\Log;
 
 /**
  * API模块公共控制器
@@ -29,7 +30,7 @@ class Common extends Controller {
     public function _initialize() {
         // $this->checkRequestAuth(); // todo
         // $this->testAes();
-
+        Log::record('--------_initialize time::'.time());
         if (Session::get('member.uid')) {
             $this->uid = Session::get('member.uid');
             $this->subject_cid = Session::get('member.subject_cid');
@@ -45,6 +46,7 @@ class Common extends Controller {
                 ['rs_login_url' => url('mobile/login/index')], 200));
                 exit;
         }
+        Log::record('--------_initialize::'.var_export($this->uid, true));
     }
 
     /**

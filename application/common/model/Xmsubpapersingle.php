@@ -89,7 +89,7 @@ class Xmsubpapersingle extends Base
 
         $sub_order_i = 1;
         Log::record('$sub_stem_ids::'.var_export(count($sub_stem_ids), true));
-        Log::record('$sub_stem_ids::'.var_export($sub_stem_ids, true));
+        // Log::record('$sub_stem_ids::'.var_export($sub_stem_ids, true));
         foreach($sub_stem_ids as $sub_stem_id) {
             $subs = $sub_stem_all_kv[$sub_stem_id];
 

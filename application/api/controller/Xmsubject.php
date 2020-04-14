@@ -41,7 +41,6 @@ class Xmsubject extends Common
         if (config('code.error') == $rs_isdone['status']) {
             return json($rs_isdone, $rs_isdone['httpcode']);
         }
-
         $data = input('post.');
         try {
             $sub_id = $data['sub_id'] . '';
@@ -83,10 +82,12 @@ class Xmsubject extends Common
                 $rs = $m_paper_single->add($add_data);
             }
             if ($rs === false) {
-                return show(config('code.error'), '提交失败，请稍后重试或联系管理员', [], 500);
+                Log::error('------->do_sub add err: sub_id - '.$sub_id);
+                return show(config('code.error'), '提交失败D-C001，请稍后重试或联系管理员', [], 200);
             }
             $rs_data = ['u_id' => $this->uid, 'do_rs' => $rs];
         } catch(\Exception $e) {
+            Log::error('------->do_sub error:'.$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
@@ -143,6 +144,7 @@ class Xmsubject extends Common
             }
             $rs_data = ['u_id' => $this->uid, 'do_rs' => $rs];
         } catch(\Exception $e) {
+            Log::error('------->domark err: sub_id - '.$sub_id . '--e:'.$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试'.$e->getLine(), [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
@@ -179,7 +181,7 @@ class Xmsubject extends Common
                 return show(config('code.error'), '您还剩余 '.$undo_count.' 题未做，您确认交卷吗？', ['isprompt' => 1], 200);
             }
         } catch(\Exception $e) {
-            Log::record('------->error:'.$e->getMessage());
+            Log::error('------->dosubmitcommit before error:'.$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
         }
         return show(config('code.success'), 'OK');
@@ -271,6 +273,7 @@ class Xmsubject extends Common
             }
             $rs_data = ['u_id' => $this->uid, 'do_rs' => $rs, 'a_href' => url('mobile/xmsubject/commitafter')];
         } catch(\Exception $e) {
+            Log::error('------->dosubcommit err: subject_cid - '.$this->subject_cid.'--e:'.$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试'.$e->getMessage(), [], 500);
         }
         return show(config('code.success'), 'OK', $rs_data, 200);
@@ -384,8 +387,8 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
             $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];
             //6.设置保存的Excel表格名称
             $filename = $subject_class_name.'-错题-'.time().'.xls';
-            Log::error("send-mail-filename::".$filename);
-            Log::error("ROOT_PATH::".ROOT_PATH);
+            Log::record("send-mail-filename::".$filename);
+            Log::record("ROOT_PATH::".ROOT_PATH);
 
             // $filename_gbk = iconv("utf-8", "gb2312", $filename);
             // Log::error("send-mail-rs2::".$filename_gbk);
@@ -404,15 +407,15 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
             if (!$rs) {
                 return show(config('code.error'), '邮件发送失败，请联系管理员或稍后重试', [], 200);
             }
-            Log::error("send-mail-rs::".var_export($rs, true));
+            Log::record("send-mail-rs::".var_export($rs, true));
             // sleep(5);
             if (file_exists($file_path)) {
                 $rs_unlink = @unlink($file_path);
-                Log::error('file delete rs:'.var_export($rs_unlink, true));
+                Log::record('file delete rs:'.var_export($rs_unlink, true));
             }
             return show(config('code.success'), 'OK', ['mail' => hide_star($stu_info['mail'])], 200);
         } catch(\Exception $e) {
-            Log::error("error---::".$e->getMessage());
+            Log::error("error--- exporttomail ::".$e->getMessage());
             return show(config('code.error'), '系统异常，请联系管理员或稍后重试', [], 500);
         }
     }
