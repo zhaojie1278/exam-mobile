@@ -67,6 +67,9 @@ class Common extends Controller
             }
 
             $reminder_time = $subc_end - $nowtime;
+            if ($reminder_time <= 0) {
+                $reminder_time = 0;
+            }
             $reminder_time_str = time_remainder($reminder_time);
             Log::record('--------uid::'.var_export($this->uid, true));
             Log::record('--------reminder_time::'.var_export($reminder_time, true));

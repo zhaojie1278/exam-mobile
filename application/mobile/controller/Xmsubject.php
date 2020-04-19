@@ -51,8 +51,12 @@ class Xmsubject extends Common
         $read_data['uid'] = $this->uid;
         $read_data['is_read'] = 1;
         $read_data['notice_id'] = $notice_id;
-
-        $rs_read = $m_notice_read->add($read_data);
+        $xm_notice_read = $m_notice_read->getOne($read_data);
+        if (!$xm_notice_read) {
+            $rs_read = $m_notice_read->add($read_data);
+        } else {
+            $rs_read = 1;
+        }
         if (!$rs_read) {
             $this->error('考试须知失败，请稍后重试或联系管理员', 'mobile/login/index');
         }

@@ -1,7 +1,7 @@
 <{layout name="layout/layout" /}>
-<link rel="stylesheet" type="text/css" href="__STATIC__/mobile/css/xmsubject.css?v=<{:time()}>" />
-<script src="__STATIC__/lib/timedown.js?v=<{:time()}>"></script>
-<script src="__STATIC__/mobile/js/xmsubject.js?v=<{:time()}>"></script>
+<link rel="stylesheet" type="text/css" href="__STATIC__/mobile/css/xmsubject.css?v=1.0" />
+<script src="__STATIC__/lib/timedown.js?v=1.1"></script>
+<script src="__STATIC__/mobile/js/xmsubject.js?v=1.0"></script>
 <div class="weui-form">
     <{empty name='list'}>
     <div class="weui-loadmore weui-loadmore_line">
@@ -63,12 +63,8 @@
     <{/volist}>
     <{$list->render()}>
     <div class="weui-form__text-area c-timer">
-        <span id="remainder_time_seconds" style="display: none;">
-            <{$reminder_time}>
-        </span>
-        <h3 class="weui-form__desc" id="reminder_timer">
-            <{$reminder_time_str}>
-        </h3>
+        <span id="remainder_time_seconds" style="display: none;"><{$reminder_time}></span>
+        <h3 class="weui-form__desc" id="reminder_timer"><{$reminder_time_str}></h3>
       </div>
     <{/empty}>
     <!--

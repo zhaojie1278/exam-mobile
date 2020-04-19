@@ -102,7 +102,7 @@ function time_remainder($time)
     } else {
         $strtime .= '';
     }
-    if ($time > 0) {
+    if ($time >= 0) {
         $strtime .= intval($time).'秒';
     }
 

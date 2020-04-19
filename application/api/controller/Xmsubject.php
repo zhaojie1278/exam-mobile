@@ -221,7 +221,7 @@ class Xmsubject extends Common
             $now_time = time();
 
 
-            Log::record('$do_subc_time::'.$do_subc_time);
+            // Log::record('$do_subc_time::'.$do_subc_time);
             Log::record('$subc_end::'.$subc_end);
             Log::record('$subc_begin::'.$subc_begin);
             Log::record('$now_time::'.$now_time); 
@@ -232,16 +232,16 @@ class Xmsubject extends Common
                 Log::record('----------is not auto commit:'.var_export(input('post.auto/d'), true));
             }
 
-            // 最后一次阅读当前考卷须知的时间
+            // 第一次阅读当前考卷须知的时间
             $m_notice_read = new \app\common\model\Xmsubjectnoticeread();
             $notice_whe = [];
             $notice_whe['subject_class_id'] = $this->subject_cid;
             $notice_whe['uid'] = $this->uid;
             $notice_whe['is_read'] = 1;
-            $last_notice_read = $m_notice_read->getOne($notice_whe, 'id desc');
+            $last_notice_read = $m_notice_read->getOne($notice_whe, 'id');
             $read_time = $last_notice_read['create_at'] ? strtotime($last_notice_read['create_at']) : 0;
 
-            if ($subc_end != 0 && $subc_begin != 0) {
+            /*if ($subc_end != 0 && $subc_begin != 0) {
                 if ($now_time <= $subc_end) {
                     $do_subc_end = $now_time;
                 } else {
@@ -253,7 +253,17 @@ class Xmsubject extends Common
                     $subc_begin = $read_time;
                 }
                 $do_subc_time = $do_subc_end - $subc_begin;
+            }*/
+            if ($now_time <= $subc_end) {
+                $do_subc_end = $now_time;
+            } else {
+                $do_subc_end = $subc_end;
             }
+            // $do_subc_end = $now_time;
+            $subc_begin = $read_time;
+            Log::record('$read_time::'.$read_time);
+            Log::record('$do_subc_end::'.$do_subc_end);
+            $do_subc_time = $do_subc_end - $subc_begin;
 
             $paper_data = array(
                 'sub_id' =>  $sub_id_answers ? json_encode(array_keys($sub_id_answers)) : null,
@@ -387,8 +397,8 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
             $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];
             //6.设置保存的Excel表格名称
             $filename = $subject_class_name.'-错题-'.time().'.xls';
-            Log::record("send-mail-filename::".$filename);
-            Log::record("ROOT_PATH::".ROOT_PATH);
+            // Log::record("send-mail-filename::".$filename);
+            // Log::record("ROOT_PATH::".ROOT_PATH);
 
             // $filename_gbk = iconv("utf-8", "gb2312", $filename);
             // Log::error("send-mail-rs2::".$filename_gbk);

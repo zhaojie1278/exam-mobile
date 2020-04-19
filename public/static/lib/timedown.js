@@ -4,7 +4,8 @@
 timedown.js
 */
 function timedown(id, totalSeconds) {
-    totalSeconds = parseInt(totalSeconds);
+    totalSeconds = Number(totalSeconds);
+    // console.log('totalSeconds::',totalSeconds);
     if (totalSeconds < 0) {
         return;
     }
