@@ -57,6 +57,7 @@ class Login extends Controller
                 if (!empty($subject_class['member_class'])) {
                     $member_class = explode(',', $subject_class['member_class']);
                     if (!in_array($member_info->class_id, $member_class)) {
+                        
                         return show(config('code.error'), '抱歉，当前试卷不可进行考试C001', [], 200);
                     }
                 }
