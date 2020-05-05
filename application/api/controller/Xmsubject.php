@@ -390,6 +390,11 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
             return show(config('code.error'), '抱歉，当前学号无邮箱信息，请完善邮箱后再发送', [], 200);
         }
 
+        // 考试结束+X分钟后才可发送
+        if (($this->subject_class['end_time'] + config('subject.export_paper_time')) > time()) {
+            return show(config('code.error'), '请在本场考试结束'.(config('subject.export_paper_time')/60).'分钟后('.date('m-d H:i', $this->subject_class['end_time'] + config('subject.export_paper_time')).')再发送', [], 200);
+        }
+
         try {
 
             $objPHPExcel = $this->phpexcelGenerate($stu_info, $xm_paper_singles);

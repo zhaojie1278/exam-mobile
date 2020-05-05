@@ -15,4 +15,6 @@ return [
     'undo_title' => '继续做题',
     'done_title' => '已做试题',
     'all_sub_title' => '全部试题',
+    'later_time' => 900, // 15分钟可迟到时间
+    'export_paper_time' => 600, // 考试记录导出及发送邮箱的时间节点（减少服务器压力）
 ];

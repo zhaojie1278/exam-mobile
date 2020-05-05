@@ -372,6 +372,11 @@ $objPHPExcel->setActiveSheetIndex($sheet1)->getStyle('D')->getAlignment()
             $this->error('抱歉，当前无考试记录');
         }
 
+        // 考试结束+X分钟后才可发送
+        if (($this->subject_class['end_time'] + config('subject.export_paper_time')) > time()) {
+            $this->error('请在本场考试结束'.(config('subject.export_paper_time')/60).'分钟后('.date('m-d H:i', $this->subject_class['end_time'] + config('subject.export_paper_time')).')再导出', null, '', 5);
+        }
+
         $objPHPExcel = $this->phpexcelGenerate($stu_info, $xm_paper_singles);
 
         $subject_class_name = $stu_info['real_name'].'-'.$this->subject_class['name'];

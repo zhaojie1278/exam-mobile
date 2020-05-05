@@ -23,21 +23,53 @@ class Login extends Controller
                 'class_no' => $class_no,
                 'real_name' => $real_namne,
                 'is_deleted' => config('code.status_normal'),
-                'status' => config('code.user_status_normal')
+                // 'status' => config('code.user_status_normal')
             ];
             $member_info = $m_xm_member->getOne($xm_sub_whe);
             if (empty($member_info['class_no'])) {
                 return show(config('code.error'), '登录失败，请校正信息后重新登录', [], 200);
             } else {
 
+                // 查看当前状态
+                if ($member_info['status'] != config('code.user_status_normal')) {
+                    return show(config('code.error'), '登录失败，当前账号已冻结，如需使用，请联系管理员启用', [], 200);
+                }
+
                 // 验证手机号
                 if (!empty($member_info['phone']) && $member_info['phone'] != $phone) {
                     return show(config('code.error'), '登录失败，请输入正确的手机号'.encrypt_sub_phone($member_info['phone']).'登录', [], 200);
                 }
-                // dump(Session::get('member'));
+
+                $nowtime = time();
+
+                // 考试时间管理（根据试卷）
+                $m_subject_class = new \app\common\model\Xmsubjectclass();
+                $sub_class_whe = ['id' => $subject_cid, 'is_deleted' => config('code.status_normal')];
+                $subject_class = $m_subject_class->getOne($sub_class_whe);
+                $subc_begin = $subject_class['begin_time'];
+                $subc_end = $subject_class['end_time'];
+
+                if (empty($subject_class['id'])) {
+                    return show(config('code.error'), '考试信息不存在', [], 200);
+                }
+
+                // 是否特定班级
+                if (!empty($subject_class['member_class'])) {
+                    $member_class = explode(',', $subject_class['member_class']);
+                    if (!in_array($member_info->class_id, $member_class)) {
+                        return show(config('code.error'), '抱歉，当前试卷不可进行考试C001', [], 200);
+                    }
+                }
+
+                if ($nowtime < $subc_begin) {
+                    return show(config('code.error'), '考试尚未开始', [], 200);
+                }
+
+                if ($nowtime < $subc_end && ($nowtime - $subc_begin) > config('subject.later_time')) {
+                    return show(config('code.error'), '考试已进行'.(config('subject.later_time')/60).'分钟，不可进入考试', [], 200);
+                }
 
                 $uid = $member_info->id;
-                $nowtime = time();
                 $rs = $m_xm_member->edit(['id' => $uid, 'login_time' => $nowtime, 'phone' => $phone]);
 
                 // 登录日志
@@ -56,21 +88,6 @@ class Login extends Controller
 
                 if ($rs === false || !$rs_login_add) {
                     throw new \think\Exception('登录信息保存失败', 100006);
-                }
-
-                // 考试时间管理（根据试卷）
-                $m_subject_class = new \app\common\model\Xmsubjectclass();
-                $sub_class_whe = ['id' => $subject_cid, 'is_deleted' => config('code.status_normal')];
-                $subject_class = $m_subject_class->getOne($sub_class_whe);
-                $subc_begin = $subject_class['begin_time'];
-                $subc_end = $subject_class['end_time'];
-
-                if (empty($subject_class['id'])) {
-                    return show(config('code.error'), '考试信息不存在', [], 200);
-                }
-
-                if ($nowtime < $subc_begin) {
-                    return show(config('code.error'), '考试尚未开始', [], 200);
                 }
 
                 $is_end_enter = false;

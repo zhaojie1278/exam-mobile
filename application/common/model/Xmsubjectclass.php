@@ -14,4 +14,9 @@ class Xmsubjectclass extends Base
     protected $table = 'xm_subject_class';
     // protected $createTime = 'create_at';
     // protected $autoWriteTimestamp = false;
+
+    public function getAllClass($where, $fields = '') {
+        $data = $this->where($where)->order('id desc')->select();
+        return $data;
+    }
 }
