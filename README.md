@@ -6,7 +6,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/topthink/think/v/unstable)](https://packagist.org/packages/topthink/think)
 [![License](https://poser.pugx.org/topthink/think/license)](https://packagist.org/packages/topthink/think)
 
-使用的相关库：、、
+使用的相关库：
 
  + WeUI
  + Jquery
