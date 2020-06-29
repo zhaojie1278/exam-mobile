@@ -1,4 +1,4 @@
-ThinkPHP 5.0
+基于 ThinkPHP 5.0 开发的考试系统
 ===============
 
 [![Total Downloads](https://poser.pugx.org/topthink/think/downloads)](https://packagist.org/packages/topthink/think)
