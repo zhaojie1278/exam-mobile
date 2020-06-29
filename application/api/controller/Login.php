@@ -67,7 +67,15 @@ class Login extends Controller
                 }
 
                 if ($nowtime < $subc_end && ($nowtime - $subc_begin) > config('subject.later_time')) {
-                    return show(config('code.error'), '考试已进行'.(config('subject.later_time')/60).'分钟，不可进入考试', [], 200);
+                    // 首次进入考试超过15分钟不可进入
+                    $m_notice_read = new \app\common\model\Xmsubjectnoticeread();
+                    $m_notice_read_whe['subject_class_id'] = $subject_cid;
+                    $m_notice_read_whe['uid'] = $member_info->id;
+                    $m_notice_read_whe['is_read'] = 1;
+                    $xm_notice_read = $m_notice_read->getOne($m_notice_read_whe);
+                    if (empty($xm_notice_read)) {
+                        return show(config('code.error'), '考试已进行'.(config('subject.later_time')/60).'分钟，不可进入考试', [], 200);
+                    }
                 }
 
                 $uid = $member_info->id;
